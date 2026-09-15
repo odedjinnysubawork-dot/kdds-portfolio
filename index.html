@@ -218,8 +218,43 @@
      dropped behind a section's content so every page's opening beat
      carries a bit of its own accent colour bleeding through, not
      just Home's. */
+  /* Atmospheric colour wash — ONE continuous set of gradients per
+     page, injected as the very first child of each .page-panel (see
+     the router script), not duplicated per-section. Since a "page"
+     here is really several stacked <section> elements sharing one
+     panel wrapper (e.g. Work = stories+works+design, Experience =
+     experience+education), painting the wash once behind the whole
+     panel — instead of once per <section> — is what makes it flow
+     seamlessly across those section boundaries instead of visibly
+     cutting off at each one. Every page gets this, including Home,
+     which used to have its own separate (and since-removed) hero-only
+     version of the same gradient.
+     Sizes/vertical position use vh/vw (viewport units), not % of this
+     element's own box: while a page is mid-flip its panel is briefly
+     locked to a short, viewport-height box for the slide animation,
+     then released back to its real, much taller, static height — if
+     these were sized in %, they'd be correctly proportioned for that
+     short box and then visibly snap-stretch the instant the panel
+     returns to full height. vh/vw always mean the same physical size
+     regardless of what the panel's own box is doing mid-transition.
+     Sits at z-index:-1 inside the panel's own isolated stacking
+     context, so it's always behind every section's real content
+     regardless of DOM order. */
+  /* Its height is set explicitly by JS (see refreshGlowHeight) to the
+     panel's real, natural content height — not "inset:0", which would
+     just inherit whatever height the panel happens to have at that
+     instant. That distinction matters because the panel is briefly
+     forced to a short, viewport-height box (position:fixed) while a
+     page-flip animation is running; inset:0 would sightsee that
+     temporary short box, size the ellipses for it, and then visibly
+     snap-stretch the instant the panel returns to its real height.
+     A JS-measured, explicit pixel height sidesteps that entirely, and
+     it also means the ellipse positions below (in %) are always
+     relative to the page's true full length — so the bottom-left one
+     actually sits at the bottom of Work or Experience's full scroll,
+     not just one screen down. */
   .section-glow{
-    position:absolute; inset:0; z-index:0; pointer-events:none;
+    position:absolute; top:0; left:0; right:0; z-index:-1; pointer-events:none;
     background:
       radial-gradient(ellipse 55% 45% at 88% 8%, color-mix(in srgb, var(--page-accent) 45%, transparent), transparent 60%),
       radial-gradient(ellipse 45% 35% at 6% 96%, color-mix(in srgb, var(--page-accent) 30%, var(--wine)), transparent 60%);
@@ -376,6 +411,8 @@
      ============================================================ */
   .page-panel{
     display:block;
+    position:relative;
+    isolation:isolate;
     box-sizing:border-box;
     border:3px solid var(--panel-accent, var(--rose));
     transition:border-color .35s var(--ease);
@@ -447,16 +484,6 @@
     position:relative;
     padding:20px 0;
     transition:background .4s var(--ease);
-  }
-  .hero::before{
-    content:'';
-    position:absolute; inset:0;
-    background:
-      radial-gradient(ellipse 60% 50% at 85% 15%, color-mix(in srgb, var(--page-accent) 55%, transparent), transparent 60%),
-      radial-gradient(ellipse 50% 40% at 10% 90%, color-mix(in srgb, var(--page-accent) 40%, var(--wine)), transparent 60%);
-    opacity:.4;
-    transition:background .4s var(--ease);
-    pointer-events:none;
   }
   .eyebrow{
     font-family:var(--mono); font-size:12px; letter-spacing:.18em;
@@ -1825,7 +1852,6 @@ Tuesday, Dec. 10. </p>
      ============================================================ -->
 <section id="experience" data-page="experience">
   <div class="deco-layer" aria-hidden="true">
-    <div class="section-glow"></div>
     <span class="deco-shape deco-disc" style="color:var(--acc-experience); width:100px; height:100px; top:4%; right:6%;"></span>
     <span class="deco-shape deco-ring" style="color:var(--acc-experience); width:60px; height:60px; bottom:12%; left:3%;"></span>
     <span class="deco-shape deco-zigzag" style="color:var(--acc-skills); width:80px; height:12px; top:40%; right:2%; transform:rotate(-6deg);"></span>
@@ -2019,7 +2045,6 @@ Tuesday, Dec. 10. </p>
      ============================================================ -->
 <section id="skills" data-page="skills">
   <div class="deco-layer" aria-hidden="true">
-    <div class="section-glow"></div>
     <span class="deco-shape deco-disc" style="color:var(--acc-skills); width:90px; height:90px; top:6%; left:4%;"></span>
     <span class="deco-shape deco-triangle down" style="color:var(--acc-contact); bottom:16%; right:6%; --tri-size:20px;"></span>
     <span class="deco-shape deco-ring" style="color:var(--acc-skills); width:50px; height:50px; bottom:6%; left:14%;"></span>
@@ -2419,6 +2444,7 @@ Tuesday, Dec. 10. </p>
     folderPanel.classList.remove('open');
     folderTabs.forEach(function(t){ t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
     activeFolder = null;
+    window.setTimeout(function(){ refreshGlowHeight(pagePanels.work); }, 520);
   }
 
   folderTabs.forEach(function(tab){
@@ -2436,6 +2462,10 @@ Tuesday, Dec. 10. </p>
       requestAnimationFrame(function(){
         folderPanel.style.maxHeight = folderPanel.scrollHeight + 'px';
       });
+      // The accordion's own open transition takes .5s (see
+      // .folder-panel); wait for it to finish before re-measuring the
+      // page's new full height, or we'd bake in a mid-transition value.
+      window.setTimeout(function(){ refreshGlowHeight(pagePanels.work); }, 520);
     });
   });
 
@@ -2994,6 +3024,13 @@ Tuesday, Dec. 10. </p>
     var panel = document.createElement('div');
     panel.className = 'page-panel';
     panel.setAttribute('data-page', pageId);
+    // One continuous atmospheric wash per page, painted behind
+    // whichever sections end up inside this panel — see .section-glow
+    // for why this lives here instead of once per <section>.
+    var glow = document.createElement('div');
+    glow.className = 'section-glow';
+    glow.setAttribute('aria-hidden', 'true');
+    panel.appendChild(glow);
     pageStage.appendChild(panel);
     pagePanels[pageId] = panel;
   });
@@ -3001,6 +3038,20 @@ Tuesday, Dec. 10. </p>
     var pageId = el.getAttribute('data-page');
     if(pagePanels[pageId]){ pagePanels[pageId].appendChild(el); }
   });
+
+  /* Measures a page-panel's real, natural content height (via
+     scrollHeight, which reports the full content extent even while
+     overflow-y is clipping it — e.g. mid page-flip) and bakes that
+     directly onto its .section-glow as an explicit pixel height. See
+     the CSS comment on .section-glow for why this needs to be a real
+     measurement rather than "inset:0". */
+  function refreshGlowHeight(panel){
+    if(!panel) return;
+    var glow = panel.querySelector('.section-glow');
+    if(!glow) return;
+    var h = panel.scrollHeight;
+    if(h > 0){ glow.style.height = h + 'px'; }
+  }
 
   /* Measures the real header height (brand row can wrap on narrow
      screens) plus the subnav's real height, so the accent rule,
@@ -3013,6 +3064,33 @@ Tuesday, Dec. 10. </p>
   }
   syncNavMetrics();
   window.addEventListener('resize', syncNavMetrics);
+  var glowResizeTimer = null;
+  window.addEventListener('resize', function(){
+    // Text reflow on resize can change a page's total height; keep the
+    // currently-visible panel's glow matched to it, debounced so this
+    // doesn't run on every intermediate resize frame.
+    window.clearTimeout(glowResizeTimer);
+    glowResizeTimer = window.setTimeout(function(){
+      if(activePageId){ refreshGlowHeight(pagePanels[activePageId]); }
+    }, 200);
+  });
+  // Images (design/folder thumbnails etc.) can still be loading at the
+  // moment a page first measures its own height; once everything has
+  // actually finished loading, take one more measurement so the glow
+  // isn't left sized for a page that was still shorter than it is now.
+  window.addEventListener('load', function(){
+    if(activePageId){ refreshGlowHeight(pagePanels[activePageId]); }
+  });
+  var glowResizeTimer = null;
+  window.addEventListener('resize', function(){
+    // Text reflow on resize can change a page's total height; keep the
+    // currently-visible panel's glow matched to it, debounced so this
+    // doesn't run on every intermediate resize frame.
+    window.clearTimeout(glowResizeTimer);
+    glowResizeTimer = window.setTimeout(function(){
+      if(activePageId){ refreshGlowHeight(pagePanels[activePageId]); }
+    }, 200);
+  });
 
   /* ---------------------------------------------------------
      THE PULL: a page-panel is normally just a static block in the
@@ -3076,6 +3154,7 @@ Tuesday, Dec. 10. </p>
       });
       window.scrollTo(0, 0);
       activePageId = pageId;
+      refreshGlowHeight(newPanel);
       if(pageId === 'work'){
         requestAnimationFrame(function(){ sizePanSection(); updatePan(); });
       }
@@ -3085,6 +3164,7 @@ Tuesday, Dec. 10. </p>
     window.scrollTo(0, 0);
     document.body.style.overflow = 'hidden';
     newPanel.style.display = '';
+    refreshGlowHeight(newPanel);
     parkAsCurtain(newPanel);
     void newPanel.offsetHeight; // commit the off-screen start position
     newPanel.style.transition = 'transform ' + CASCADE_MS + 'ms var(--cascade-ease)';
@@ -3098,6 +3178,7 @@ Tuesday, Dec. 10. </p>
       releaseFromCurtain(newPanel);
       document.body.style.overflow = '';
       window.scrollTo(0, 0);
+      refreshGlowHeight(newPanel);
       if(pageId === 'work'){ sizePanSection(); updatePan(); }
     }, CASCADE_MS + 30);
 
