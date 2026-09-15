@@ -94,6 +94,20 @@
     position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0;
   }
   .deco-shape{ position:absolute; }
+  .deco-tri{
+    width:0; height:0;
+    border-left:13px solid transparent;
+    border-right:13px solid transparent;
+    border-bottom:22px solid var(--shape, var(--rose));
+    opacity:.75;
+    filter:drop-shadow(0 3px 5px rgba(0,0,0,.3));
+  }
+  .deco-tri.outline{
+    width:22px; height:22px; border:none; background:none;
+    clip-path:polygon(50% 4%, 96% 96%, 4% 96%);
+    box-shadow:inset 0 0 0 2.5px var(--shape, var(--rose));
+    filter:none;
+  }
   .deco-ring{
     border-radius:50%; border:2px dashed currentColor; opacity:.35;
   }
@@ -770,7 +784,7 @@
     gap:4vw;
     padding:0 6vw;
     will-change:transform;
-    padding-top: 5%;
+    padding-top: 10%;
   }
   .story-panel{
     flex:0 0 auto;
@@ -943,7 +957,7 @@
   .contact h2.head{ font-size:clamp(2.4rem, 6vw, 4.4rem); }
   .contact-links{ display:flex; flex-direction:column; gap:6px; }
   .contact-links a{
-    font-family:var(--mono); font-size:14px; text-decoration:none; color:var(--ink-soft);
+    font-family:var(--mono); font-size:20px; text-decoration:none; color:var(--ink-soft);
     border-bottom:1px solid transparent; transition:color .25s var(--ease), border-color .25s var(--ease);
     width:fit-content;
   }
@@ -993,6 +1007,10 @@
   }
   .tl-org{
     font-family:var(--mono); font-size:12px; letter-spacing:.04em;
+    color:var(--ink-soft); text-transform:uppercase; margin-bottom:14px;
+  }
+  .tl-achv{
+    font-family:var(--mono); font-size:8px; letter-spacing:.04em;
     color:var(--ink-soft); text-transform:uppercase; margin-bottom:14px;
   }
   .tl-points{ margin:0; padding-left:18px; color:var(--ink-soft); font-size:.95rem; line-height:1.7; }
@@ -1163,12 +1181,19 @@
     background:var(--ink);
     border:1px solid rgba(255,217,218,.22);
     position:fixed; inset:0; margin:auto; height:fit-content;
-    display:flex; flex-direction:column;
     overflow:hidden;
     opacity:0; transform:translateY(18px) scale(.96);
     transition:opacity .35s var(--ease), transform .35s var(--ease);
     box-shadow:var(--paper-shadow);
   }
+  /* IMPORTANT: display must stay scoped to [open]. The browser's own
+     stylesheet hides <dialog> with `dialog:not([open]){display:none}`,
+     but a normal author rule always wins that fight over a UA rule
+     regardless of selector specificity — so an unscoped `display:flex`
+     here would leave this dialog laid out (and eating clicks/hover)
+     on the page even while "closed". Scoping it to [open] is what
+     lets the UA rule actually hide it once the open attribute is gone. */
+  .case-file-dialog[open]{ display:flex; flex-direction:column; }
   .case-file-dialog::before{
     content:''; position:absolute; top:-11px; left:50%; transform:translateX(-50%) rotate(-3deg);
     width:80px; height:22px;
@@ -1435,6 +1460,21 @@
     color:var(--cream); background:rgba(27,32,33,.6);
     border:1px solid rgba(255,217,218,.25); padding:3px 8px;
   }
+  /* Expand-to-fullscreen button, top-right corner of the scrap photo.
+     Sits above the media (z-index:2, same layer as the tag) so it's
+     always clickable even on top of a <video>'s own control strip. */
+  .scrap-expand-btn{
+    position:absolute; top:10px; right:10px; z-index:2;
+    width:30px; height:30px; border-radius:50%;
+    background:rgba(27,32,33,.6); border:1px solid rgba(255,217,218,.3);
+    color:var(--cream); font-size:14px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; transform:scale(.9);
+    transition:opacity .2s var(--ease), transform .2s var(--ease), background .2s var(--ease), border-color .2s var(--ease);
+  }
+  .scrap-photo:hover .scrap-expand-btn,
+  .scrap-expand-btn:focus-visible{ opacity:1; transform:scale(1); }
+  .scrap-expand-btn:hover{ background:var(--wine); border-color:var(--wine); }
   .scrap-kicker{ font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--wine); }
   .scrap-title{
     font-family:var(--marker); font-weight:400; font-size:2.2rem; line-height:1.05;
@@ -1481,6 +1521,30 @@
     transition:background .25s var(--ease), border-color .25s var(--ease), transform .25s var(--ease);
   }
   .filmstrip-nav:hover{ background:var(--wine); border-color:var(--wine); transform:scale(1.08); }
+
+  /* Fullscreen media viewer — a plain "as large as it can be, keep
+     its own aspect ratio" preview. Background is transparent since
+     the shared dialog::backdrop already dims the page behind it. */
+  .media-lightbox-dialog{
+    width:min(1400px, 96vw); max-height:96vh;
+    position:fixed; inset:0; margin:auto; height:fit-content;
+    background:transparent; border:none; box-shadow:none;
+    opacity:0; transform:scale(.96);
+    transition:opacity .3s var(--ease), transform .3s var(--ease);
+  }
+  .media-lightbox-dialog[open]{ display:flex; align-items:center; justify-content:center; }
+  .media-lightbox-dialog.is-open{ opacity:1; transform:scale(1); }
+  .media-lightbox-dialog .dialog-close{
+    background:rgba(27,32,33,.75);
+  }
+  .media-lightbox-body{ display:flex; max-width:100%; max-height:96vh; }
+  .media-lightbox-body img,
+  .media-lightbox-body video{
+    display:block; margin:auto;
+    max-width:100%; max-height:96vh; width:auto; height:auto;
+    object-fit:contain;
+    box-shadow:0 24px 70px rgba(0,0,0,.6);
+  }
 
   /* ============================================================
      EXPERIENCE — vertical timeline. A single spine runs down the
@@ -1698,7 +1762,7 @@
         </div>
       </article>
 
-      <article class="story-panel" data-work-id="unesco-bohol-asin-tibuok" tabindex="0" role="button" aria-label="Open full article: UNESCO Bohol's Asin Tibuok, need of urgent safeguarding">
+      <article class="story-panel" data-work-id="unesco-bohol-asin-tibuok" tabindex="0" role="button" aria-label="Open full article: Closed Doors, Open Files">
         <div class="story-media">
           <img src="assets/Asin-Tibuok.png" alt="" loading="lazy">
           <span class="frame-sprocket left"></span>
@@ -1706,15 +1770,12 @@
           <span class="frame-tag">FRAME 02</span>
         </div>
         <div class="story-meta">
-          <div class="story-pub">NewsWatch Plus</div>
+          <div class="story-pub">NewsWatch Plus Philippines · Culture</div>
           <h3 class="story-title">UNESCO Bohol's Asin Tibuok, need of urgent safeguarding</h3>
-          <p class="story-dek"><span style="font-weight: 700;">Metro Manila, Philippines -</span> The United Nations Educational, Scientific and Cultural 
-Organization (UNESCO) inscribed the making of Asin Tibuok, the artisanal sea salt of 
-Bohol, into the List of Intangible Cultural Heritage in Need of Urgent Safeguarding on 
-Tuesday, Dec. 10. </p>
+          <p class="story-dek"><span style="font-weight: 700;">Metro Manila, Philippines -</span> The United Nations Educational, Scientific and Cultural Organization (UNESCO) inscribed the making of Asin Tibuok, the artisanal sea salt of Bohol, into the List of Intangible Cultural Heritage in Need of Urgent Safeguarding on Tuesday, Dec. 10. </p>
         </div>
       </article>
-
+      
       <article class="story-panel" data-work-id="kpop-demon-hunters-ejae" tabindex="0" role="button" aria-label="Open full article: Closed Doors, Open Files">
         <div class="story-media">
           <img src="assets/ejae.png" alt="" loading="lazy">
@@ -1723,7 +1784,7 @@ Tuesday, Dec. 10. </p>
           <span class="frame-tag">FRAME 03</span>
         </div>
         <div class="story-meta">
-          <div class="story-pub">The Marshall Project</div>
+          <div class="story-pub">NewsWatch Plus Philippines · Entertainment</div>
           <h3 class="story-title">'KPop Demon Hunters' singer Ejae dropping debut single this October</h3>
           <p class="story-dek"><span style="font-weight: 700;"> Metro Manila, Philippines –</span> EJAE, one of the singers in the animated film “KPop Demon Hunters,” will drop a new single on Oct. 24. </p>
         </div>
@@ -1760,6 +1821,9 @@ Tuesday, Dec. 10. </p>
       </button>
       <button class="folder-tab" data-folder="Lifestyle" role="tab" aria-selected="false" aria-controls="folderPanel" type="button">
         <span class="folder-tab-icon" aria-hidden="true"></span>Lifestyle
+      </button>
+      <button class="folder-tab" data-folder="Entertainment" role="tab" aria-selected="false" aria-controls="folderPanel" type="button">
+        <span class="folder-tab-icon" aria-hidden="true"></span>Entertainment
       </button>
       <button class="folder-tab" data-folder="Entertainment" role="tab" aria-selected="false" aria-controls="folderPanel" type="button">
         <span class="folder-tab-icon" aria-hidden="true"></span>Entertainment
@@ -1844,6 +1908,16 @@ Tuesday, Dec. 10. </p>
     <div class="scrapbook-spread" id="scrapbookSpread"><!-- populated by JS --></div>
     <button class="filmstrip-nav next" id="filmstripNext" aria-label="Next page" type="button">›</button>
   </div>
+</dialog>
+
+<!-- Fullscreen viewer for a single scrap photo/video — opened by the
+     expand button on a scrapbook frame's picture. Reuses the same
+     open/close animation + backdrop as the other dialogs above. -->
+<dialog id="mediaLightbox" class="media-lightbox-dialog" aria-label="Full-size preview">
+  <form method="dialog" class="dialog-close-form">
+    <button class="dialog-close" aria-label="Close preview">✕</button>
+  </form>
+  <div class="media-lightbox-body" id="mediaLightboxBody"><!-- populated by JS --></div>
 </dialog>
 
 <!-- ============================================================
@@ -2009,6 +2083,9 @@ Tuesday, Dec. 10. </p>
           <div>
             <h3 class="tl-role">B.A. in Journalism</h3>
             <div class="tl-org">University of Santo Tomas — Manila</div>
+            <div class="tl-achv">Community Service Awardee 2024 - UST Journalism Society Executive Board ‘24-‘25</div>
+            <div class="tl-achv">Community Service Awardee 2024 - UST Journalism Society Executive Board ‘23-‘24</div>
+            <div class="tl-achv">Dean’s List (A.Y. 2022 - 2023, First Term of A.Y. 2023 - 2024)</div>            
           </div>
         </div>
       </div>
@@ -2019,8 +2096,10 @@ Tuesday, Dec. 10. </p>
         <div class="tl-body">
           <img src="assets/educlogo2.png" alt="College of San Benildo-Rizal logo" class="tl-logo" loading="lazy">
           <div>
-            <h3 class="tl-role">Senior High School Humanities and Social Sciences (HUMSS) strand </h3>
+            <h3 class="tl-role">Humanities and Social Sciences (HUMSS) strand </h3>
+            <h3 class="tl-role">Senior High School</h3>
             <div class="tl-org">College of San Benildo-Rizal — Rizal</div>
+            <div class="tl-achv">Graduated with High Honors</div>
           </div>
         </div>
       </div>
@@ -2033,6 +2112,11 @@ Tuesday, Dec. 10. </p>
           <div>
             <h3 class="tl-role">Junior High School</h3>
             <div class="tl-org">Our Lady of Perpetual Succor College — Marikina</div>
+            <div class="tl-achv">HORIZON Publication Staff (S.Y. 2018 - 2019)</div>
+            <div class="tl-achv">HALCYON 2017 Winner for Features</div>
+            <div class="tl-achv">Consistent Merit Awardee</div>
+            <div class="tl-achv">Spelling Bee ‘19-’20 Champion</div>
+            <div class="tl-achv">Nutrition Month Quiz Bee 1st Runner-up</div>
           </div>
         </div>
       </div>
@@ -2117,7 +2201,7 @@ Tuesday, Dec. 10. </p>
   <div class="wrap contact-inner">
     <div>
       <span class="kicker">Get in touch</span>
-      <h2 class="head">Got a tip,<br>or a story to assign?</h2>
+      <h2 class="head">Got a tip<br>or a story to assign?</h2>
     </div>
     <div class="contact-links">
       <a href="mailto:kirstiendsantos.work@gmail.com">kirstiendsantos.work@gmail.com</a>
@@ -2286,14 +2370,58 @@ Tuesday, Dec. 10. </p>
 
     { id:'secondhand-bookstores', genre:'Lifestyle', year:'2025', 
     title:'Are second-hand bookstores turning a new, digital page', 
-    pub:'The Trilby', dek:'Scheduling algorithms and staffing-agency practices quietly filter out applicants long before a human reviewer sees a resume.', 
+    link: 'https://thetrilby.wixsite.com/the-trilby/aresecond-handbookstoresturninganew-digitalpage',
+    pub:'The Trilby', dek:'13 May 2025 · Kirstien Dominique Santos & Jan Alyanna Tamaray ', 
     skills:['Data Journalism','SQL'], 
     published:true, 
     body:[
-      { type:'p', text:'Full first paragraph of the article...' },
-      { type:'image', src:'assets/works/housing-1.jpg', caption:'Caption text' },
-      { type:'p', text:'Next paragraph...' },
-      { type:'pullquote', text:'A standout line from the piece.' }
+      { type:'image', src:'assets/Are second-hand bookstores turning a new, digital page, Santos.png', caption:'Artwork by Kirstien Dominique Santos/The Trilby' },
+      { type:'pullquote', text:'Are second-hand bookstores turning a new, digital page?' },
+      { type:'p', text:'In the narrow pathways of Recto, Manila, several weathered books with dog-eared pages and cracked spines can be found among the creaking shelves of various storefronts.' },
+      { type:'p', text:'For decades, these second-hand bookstores have been a haven for students, academics, and casual readers seeking affordable literature. ' },
+      { type:'p', text:'However, as smartphones become the new pathways and social media the new storefronts, the second-hand booksellers of Manila find themselves at a crossroads; forced to either adapt to the digital age or risk the loss of business.'},
+      { type:'p', text:'Ruth Cartoneros, a 47-year-old physical second-hand bookstore owner, faces the same concern.'},
+      { type:'p', text:'“Kasi marami na ngayon parang ayaw na rin magbasa. Parang gusto nalang nila PDF [copies],” she told The Trilby, adding that it has become a practice for readers to instead print online-sourced book chapters.'},
+      { type:'p', text:'To overcome the shift in reader preferences, she had to create an online store to keep her Recto-based business afloat.'},
+      { type:'p', text:'“May online store din, pero ako mas gusto ko kasi yung physical,” she said. “Kasi sa online store, hindi naman binibigay yung tamang books. At least pag ka sa physical store, pwede mo siyang palit[an].”'},
+      { type:'pullquote', text:'Changing platforms, changing tastes' },
+      { type:'p', text:'According to economist, Bruce De Guzman, the challenges faced by physical second-hand booksellers can be attributed to the CoVid-19 pandemic.'},
+      { type:'p', text:'“The pandemic coerced us to work remotely, kaya talaga may shift to online,” he said.'},
+      { type:'p', text:'However, he also pointed out that online second-hand bookstores have been popular since before the pandemic, through spaces such as Facebook Marketplace.'},
+      { type:'p', text:'The pandemic simply accelerated this transition, creating what he describes as a “shift” in format, rather than just increased competition.'},
+      { type:'p', text:'“If they don’t adapt to what’s happening right now, kung saan may trend ng online shopping, I don’t know kung anong mangyayari sa kanila,” De Guzman explained. '},
+      { type:'p', text:'Aside from noticing a great shift in preferred shopping platforms, Cartoneros also found sourcing for books more challenging than in previous years, explaining that publishers do not give their distributors a 30-day period to pay for stocks anymore.  '},
+      { type:'p', text:'She also noted a decrease in sales, which have gone from 20 percent to 10 percent. '},
+      { type:'p', text:'“Magbibigay pa kami ng minsan [ng mga discount], So, mahahati na yung percentage namin.” she said. “Lumiliit. Lumiliit talaga.” '},
+      { type:'p', text:'While physical booksellers such as Cartoneros struggle to adapt with changing platforms and tastes, online booksellers such as Mary Elaine Ramos, 41, must overcome an oversaturated market.'},
+      { type:'p', text:'Ramos, who has been running her Facebook-based store “Books Around the Corner” since 2008, stated that the platform has become increasingly competitive for online sellers.'},
+      { type:'p', text:'“Competition is [mostly] online, especially in Facebook,” she said. '},
+      { type:'p', text:'Online Facebook groups such as “Secondhand Books Philippines,” which serves more than 138,000 members, illustrate the digital bookstore community’s large buyer and seller base. '},
+      { type:'p', text:'To differentiate her offerings from other stores, Ramos carefully curates her selection to consist of books that customers of any age would want to have in their libraries.  '},
+      { type:'p', text:'“Classics are still our bestsellers,” she said. “[While] young readers are more influenced [by] what is popular [on] social media.”'},
+      { type:'p', text:'She also ensures that her books are priced with accessibility in mind, stating that their “competitive pricing” gives customers more options to choose from.'},
+      { type:'pullquote', text:'Collaboration over competition' },
+      { type:'p', text:'Rather than seeing onsite and online spaces as opposing entities, Ramos considers them a “collaboration,” emphasizing that physical and digital book buying can go hand-in-hand. '},
+      { type:'p', text:'“We have a pop-up store every now and then, so that [customers] can immerse themselves in our books,” she said. '},
+      { type:'p', text:'Aside from online sellers like Ramos, this hybrid approach can offer another path forward for traditional booksellers such as Cartoneros. '},
+      { type:'p', text:'As De Guzman pointed out, even established university presses are expanding their presence by joining online shopping platforms while also maintaining physical operations. '},
+      { type:'p', text:'“Tignan mo nga yung UST Publishing House, dati diba [in-campus] lang sila nag bebenta? Ngayon, nasa Shopee [na sila],” he said. '},
+      { type:'p', text:'For consumers like 22-year-old student Sofia del Rosario, both models of bookselling offer distinct advantages that cannot be replicated by purchasing firsthand books.'},
+      { type:'p', text:'Second-hand is more appealing compared to brand new,” said Del Rosario, citing not only the affordability but also the unique character of a pre-loved book, such as its vintage cover design.'},
+      { type:'p', text:'“She also noted that buying second-hand books is an opportunity to get recommendations from other readers, who could have considered their copies worth sharing'},
+      { type:'p', text:'While Del Rosario still prefers browsing physical second-hand stores to be able to see the condition of the copies, she acknowledges the greater accessibility of online platforms, especially for finding specific titles.'},
+      { type:'p', text:'“The one I was looking for, The Count of Monte Cristo, I couldn’t find for a long time to the point [where] I had to buy brand new, [but] I would have preferred second-hand,” she said.'},
+      { type:'pullquote', text:'Advocating for affordability' },
+      { type:'p', text:'To Ramos, second-hand bookstores are not only a business, but an advocacy to uphold.'},
+      { type:'p', text:'“Reading books should not be expensive,” she said. “It should be an affordable option as [books] give [people] a new perspective in life.”'},
+      { type:'p', text:'Ramos also pointed out that the Philippines’ top bookstore chains which sell brand new books have become too expensive, especially for students.'},
+      { type:'p', text:'Second-hand bookstores serve to remedy this problem by providing cheaper alternatives, which Del Rosario noted as beneficial when a reader’s budget is restricted.'},
+      { type:'p', text:'She also emphasized the need for accessibility and how second-hand bookstores help bridge the gap.'},
+      { type:'p', text:'“Second-hand bookstores that provide textbooks or other materials help people who can\u2019t really afford it,” Del Rosario said.'},
+      { type:'p', text:'As for Cartoneros, she remains a staunch believer in the irreplaceability of physical secondhand bookstores, citing that digital spaces often restrict her interactions with the reading community.'},
+      { type:'p', text:'“It\u2019s more raw,” she said. “Unlike pag-online, I know we have to keep up with times and technology is fast-paced na, pero nothing beats like yung nakikita mo yung customer mo.”'},
+      { type:'p', text:'She added that sellers can express their appreciation for customers more openly when they aren’t behind a screen, showing that not only buyers appreciate the sensory aspect of buying second-hand from physical stores.'},
+      { type:'p', text:'“Para sa amin, hindi mo matatawaran yung papapasalamat namin sa mga customers. Unlike pagonline, parang walang care [at] walang pakialamanan,” she said.'}
     ] },
 
     { id:'dole-cebu-bpo', genre:'Affairs', year:'2022', 
@@ -2340,7 +2468,7 @@ Tuesday, Dec. 10. </p>
     { id:'mirasol', genre:'Weather', year:'2023', title:'Mirasol', 
     pub:'NewsWatch Plus Philippines', dek:'A FOIA-built database of state labor complaints becomes the spine of a three-part accountability series.', 
     skills:['SQL','Python (pandas)'], 
-    published:false, 
+    published:true, 
     body:[
       { type:'p', text:'Full first paragraph of the article...' },
       { type:'image', src:'assets/works/housing-1.jpg', caption:'Caption text' },
@@ -2400,7 +2528,7 @@ Tuesday, Dec. 10. </p>
     title:'Weather Wednesday story', 
     pub:'NewsWatch Plus Philippines', dek:'A FOIA-built database of state labor complaints becomes the spine of a three-part accountability series.', 
     skills:['SQL','Python (pandas)'], 
-    published:false, 
+    published:true, 
     body:[
       { type:'p', text:'Full first paragraph of the article...' },
       { type:'image', src:'assets/works/housing-1.jpg', caption:'Caption text' },
@@ -2711,7 +2839,10 @@ Tuesday, Dec. 10. </p>
     return (
       '<div class="scrapbook-page scrapbook-page-left">' +
         '<span class="scrap-tape" aria-hidden="true"></span>' +
-        '<div class="scrap-photo">' + photoMedia + '<span class="scrap-photo-tag">FRAME 0' + (index + 1) + '</span></div>' +
+        '<div class="scrap-photo">' + photoMedia +
+          '<span class="scrap-photo-tag">FRAME 0' + (index + 1) + '</span>' +
+          '<button type="button" class="scrap-expand-btn" data-frame-index="' + index + '" aria-label="View full screen">⛶</button>' +
+        '</div>' +
       '</div>' +
       '<div class="scrapbook-spine" aria-hidden="true"></div>' +
       '<div class="scrapbook-page scrapbook-page-right">' +
@@ -2847,6 +2978,41 @@ Tuesday, Dec. 10. </p>
     openDialogAnimated(filmstripDialog);
   }
   wireDialogClose(filmstripDialog);
+
+  /* ---------------------------------------------------------
+     FULLSCREEN MEDIA VIEWER — opened from the expand button on a
+     scrapbook frame's photo/video. Delegated on the spread container
+     rather than bound per-render, since renderScrapbookSpread()
+     replaces that container's innerHTML on every page turn.
+     --------------------------------------------------------- */
+  var mediaLightbox = document.getElementById('mediaLightbox');
+  var mediaLightboxBody = document.getElementById('mediaLightboxBody');
+
+  function openMediaLightbox(index){
+    var d = designData[index];
+    if(!d || !mediaLightboxBody) return;
+    mediaLightboxBody.innerHTML = designMediaHtml(d, { controls: true });
+    openDialogAnimated(mediaLightbox);
+  }
+  wireDialogClose(mediaLightbox);
+  if(mediaLightbox){
+    // Emptying the body on close stops any playing video/audio —
+    // otherwise a paused-but-still-loaded video would keep decoding
+    // in the background after the dialog is gone.
+    mediaLightbox.addEventListener('close', function(){
+      mediaLightboxBody.innerHTML = '';
+    });
+  }
+  if(scrapbookSpread){
+    scrapbookSpread.addEventListener('click', function(e){
+      var btn = e.target.closest('.scrap-expand-btn');
+      if(!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      openMediaLightbox(Number(btn.dataset.frameIndex));
+    });
+  }
+
   if(filmstripDialog){
     filmstripDialog.addEventListener('keydown', function(e){
       if(e.key === 'ArrowRight'){ goToFrame(filmstripIndex + 1); }
