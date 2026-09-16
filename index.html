@@ -539,7 +539,7 @@
   h1.masthead.script-name{
     font-family:"Vogue", cursive;
     font-weight:700;
-    font-size:clamp(3.4rem, 7.2vw, 5.6rem);
+    font-size:clamp(2.4rem, 6.2vw, 4.6rem);
     line-height:1.05;
     letter-spacing:.01em;
     margin:0 0 22px;
@@ -998,19 +998,19 @@
   }
   .tl-row:hover{ padding-left:34px; background:rgba(234,99,140,.05); }
   .tl-date{
-    font-family:var(--mono); font-size:12px; letter-spacing:.05em;
+    font-family:var(--mono); font-size:16px; letter-spacing:.05em;
     color:var(--rose); text-transform:uppercase; padding-top:4px;
   }
   .tl-role{
-    font-family:var(--display); font-weight:600; font-size:1.4rem; color:var(--paper);
+    font-family:var(--display); font-weight:600; font-size:1.6rem; color:var(--paper);
     margin:0 0 4px;
   }
   .tl-org{
-    font-family:var(--mono); font-size:12px; letter-spacing:.04em;
+    font-family:var(--mono); font-size:1.4rem; letter-spacing:.04em;
     color:var(--ink-soft); text-transform:uppercase; margin-bottom:14px;
   }
   .tl-achv{
-    font-family:var(--mono); font-size:8px; letter-spacing:.04em;
+    font-family:var(--mono); font-size:0.7rem; letter-spacing:.04em;
     color:var(--ink-soft); text-transform:uppercase; margin-bottom:14px;
   }
   .tl-points{ margin:0; padding-left:18px; color:var(--ink-soft); font-size:.95rem; line-height:1.7; }
@@ -1291,6 +1291,18 @@
     font-family:var(--display); font-style:italic; font-weight:500;
     font-size:1.35rem; line-height:1.4; color:var(--paper);
   }
+  .cf-list{
+    margin:18px 0 24px; padding:0; list-style:none;
+  }
+  .cf-list li{
+    position:relative; margin:0 0 10px 0; padding-left:22px;
+    font-family:var(--body); font-size:1rem; line-height:1.55; color:var(--paper);
+  }
+  .cf-list li::before{
+    content:''; position:absolute; left:0; top:.62em;
+    width:8px; height:8px; border-radius:50%;
+    background:var(--case-accent, var(--rose));
+  }
 
   /* ============================================================
      DESIGN GALLERY + FILMSTRIP LIGHTBOX
@@ -1429,6 +1441,13 @@
   .social-embed-dialog.is-open{ opacity:1; transform:translateY(0) scale(1); }
   .social-embed-body{ display:flex; justify-content:center; overflow-y:auto; max-height:calc(88vh - 56px); }
   .social-embed-body .cf-embed-placeholder{ margin:40px auto; }
+  .youtube-embed-frame{
+    position:relative; width:100%; max-width:500px;
+    aspect-ratio:16/9; background:#000;
+  }
+  .youtube-embed-frame iframe{
+    position:absolute; inset:0; width:100%; height:100%; border:0;
+  }
 
   /* Hovering (or tabbing to) a skill tag on the Skills page: the tag
      itself gets a subtle "has matches" glow, and this floating panel
@@ -2124,6 +2143,20 @@
             <span class="item-skill-tag">DaVinci Resolve</span>
             <span class="item-skill-tag">Adobe Illustrator</span>
           </div>
+          <div class="vtl-links">
+            <button type="button" class="link-chip type-youtube" data-embed-type="youtube" data-embed-url="https://www.youtube.com/@CuttotheChase-News">
+              <svg viewBox="0 0 20 20"><path d="M12 4h2.2V1.2h-2.4C9.3 1.2 8 2.6 8 5v2H6v3h2v8h3v-8h2.3l.4-3H11V5c0-.6.3-1 1-1z"/></svg>
+              <span>Cut to the Chase</span>
+            </button>
+            <button type="button" class="link-chip type-youtube" data-embed-type="youtube" data-embed-url="https://www.youtube.com/shorts/UqaOip3n9rQ">
+              <svg viewBox="0 0 20 20"><path d="M6 2h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4zm0 1.8A2.2 2.2 0 0 0 3.8 6v8A2.2 2.2 0 0 0 6 16.2h8a2.2 2.2 0 0 0 2.2-2.2V6A2.2 2.2 0 0 0 14 3.8H6zM10 6.3A3.7 3.7 0 1 1 6.3 10 3.7 3.7 0 0 1 10 6.3zm0 1.8A1.9 1.9 0 1 0 11.9 10 1.9 1.9 0 0 0 10 8.1zm4-2.7a.9.9 0 1 1-.9.9.9.9 0 0 1 .9-.9z"/></svg>
+              <span>Video 1</span>
+            </button>
+            <a class="link-chip" href="https://thetrilby.wixsite.com/the-trilby" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 20 20"><path d="M4 3h9l3 3v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm8 1v3h3l-3-3zM6 10h8v1.4H6V10zm0 3h8v1.4H6V13z"/></svg>
+              <span>Read Article</span>
+            </a>
+          </div>
         </div>
       </article>
 
@@ -2660,7 +2693,12 @@
       { type:'pullquote', text:'Metro Manila, Philippines – The Department of Labor and Employment (DOLE) ordered a Cebu-based business process outsourcing (BPO) company to temporarily halt its operations after it was found to have no earthquake and disaster preparedness response plan.' },
       { type:'p', text:'The DOLE Central Visayas on Sunday, Oct. 5 said it issued the work stoppage order against the unnamed BPO company as its “Hazard identification, Risk Assessment, and Control” process did not cover any risks relating to natural calamities.' },
       { type:'p', text:'Other deficiencies included inconsistencies in the composition and operation of the firm’s safety and health committee and no implementation of a “No Construction Safety and Health Program” for the construction activities in one of the occupied floors of the company.' },
-      { type:'p', text:'The DOLE Central Visayas also said that if the company fails to correct the violations, it will be meted a daily penalty not exceeding P100,000 per day after being notified of the order. The work stoppage order mandates companies to cease and desist operations until violations have been corrected and all unsafe conditions and acts exposing employees to imminent danger have been addressed. Workers from the BPO that were affected will be temporarily reassigned in a different area of operation or be allowed to do a flexible or alternative work setup.If not feasible, employers shall pay the affected workers their corresponding wages during the work stoppage period. The labor department also issued a notice of conference to another BPO company after a recent inspection found occupational safety and health (OSH) deficiencies. The orders came after several BPO employees filed a complaint to DOLE through the BPO Industry Employees’ Network Cebu, citing safety and labor rights violations.' },
+      { type:'p', text:'The DOLE Central Visayas also said that if the company fails to correct the violations, it will be meted a daily penalty not exceeding P100,000 per day after being notified of the order.'},
+      { type:'p', text:'The work stoppage order mandates companies to cease and desist operations until violations have been corrected and all unsafe conditions and acts exposing employees to imminent danger have been addressed.' },
+      {type:'p', text: 'Workers from the BPO that were affected will be temporarily reassigned in a different area of operation or be allowed to do a flexible or alternative work setup.'},
+      {type:'p', text: 'If not feasible, employers shall pay the affected workers their corresponding wages during the work stoppage period. '},
+      {type:'p', text: 'The labor department also issued a notice of conference to another BPO company after a recent inspection found occupational safety and health (OSH) deficiencies. '},
+      {type:'p', text: 'The orders came after several BPO employees filed a complaint to DOLE through the BPO Industry Employees’ Network Cebu, citing safety and labor rights violations.'},
       { type:'pullquote', text:'READ: Cebu BPO workers file complaint over order to return to work after strong quake', url:'https://www.newswatchplus.ph/2025/10/02/death-toll-in-cebu-earthquake-rises-to-72-ndrrmc/' },
       { type:'p', text:'Cebu was hit with a 6.9 magnitude earthquake on Sept. 30, killing 72 people and injuring hundreds.'}
     ] },
@@ -2677,9 +2715,16 @@
     body: [
       { type: 'image', src: 'assets/ejae.png', caption: 'EJAE, singing voice of HUNTR/X\u2019s Rumi, poses for a photo at the premiere of "KPop Demon Hunters" in Los Angeles, US. (EJAE/Instagram)' },
       { type: 'pullquote', text: 'Metro Manila, Philippines – EJAE, one of the singers in the animated film “KPop Demon Hunters,” will drop a new single on Oct. 24.' },
-      { type: 'p', text: 'EJAE, the singing voice of HUNTR/X’s Rumi, revealed in a letter that she wrote songs that “never found the right home” and thought her upcoming single “In Another World” would be the perfect place to start.“Writing this song helped me through a hard time. I hope that sharing it can help others too,” she said.EJAE is a songwriter who has composed songs for K-pop groups, including Red Velvet’s “Psycho” and aespa’s “Drama.”She also said that she became comfortable being behind the scenes as a songwriter, noting that she did not think she was meant to be an artist.' },
+      { type: 'p', text: 'EJAE, the singing voice of HUNTR/X’s Rumi, revealed in a letter that she wrote songs that “never found the right home” and thought her upcoming single “In Another World” would be the perfect place to start.' },
+      { type: 'p', text: '“Writing this song helped me through a hard time. I hope that sharing it can help others too,” she said.' },
+      { type: 'p', text: 'EJAE is a songwriter who has composed songs for K-pop groups, including Red Velvet’s “Psycho” and aespa’s “Drama.”' },
+      { type: 'p', text: 'She also said that she became comfortable being behind the scenes as a songwriter, noting that she did not think she was meant to be an artist.' },
       { type: 'instagram', url: 'https://www.instagram.com/p/DPad8h1Dmzo/' },
-      { type: 'p', text: '“Recently though, I realized I don’t need to box myself into being the traditional view of an artist,” she said on Instagram.The singer also said that writing became a form of therapy and “making sense of the noise in her head.”She also feels humbled and grateful for all that she has received as the voice of the main protagonist of the film, thanking all her supporters. “KPop Demon Hunters” was released last June and has become the most viewed Netflix movie of all time. EJAE, along with other singing voices for the HUNTR/X trio Audrey Nuna and Rei Ami, recently appeared in a Saturday Night Live skit with Bad Bunny. They are also set to debut their first live performance as a group in The Tonight Show with Jimmy Fallon.' }
+      { type: 'p', text: '“Recently though, I realized I don’t need to box myself into being the traditional view of an artist,” she said on Instagram.' },
+      { type: 'p', text: 'The singer also said that writing became a form of therapy and “making sense of the noise in her head.”' },
+      { type: 'p', text: 'She also feels humbled and grateful for all that she has received as the voice of the main protagonist of the film, thanking all her supporters.' },
+      { type: 'p', text: '“KPop Demon Hunters” was released last June and has become the most viewed Netflix movie of all time. ' },
+      { type: 'p', text: 'EJAE, along with other singing voices for the HUNTR/X trio Audrey Nuna and Rei Ami, recently appeared in a Saturday Night Live skit with Bad Bunny. They are also set to debut their first live performance as a group in The Tonight Show with Jimmy Fallon.' },
   ] },
 
     { id:'marcos-resign-not-seditious', genre:'Affairs', year:'2025', 
@@ -2713,21 +2758,24 @@
       { type:'image', src:'assets/mirasol-1.1.png'},
       { type:'pullquote', text:'Metro Manila, Philippines - The weather bureau said 14 areas in Luzon are under Signal No. 1 on Wednesday, Sept. 17 due to Tropical Depression Mirasol.' },
       { type:'image', src:'assets/mirasol-1.2.png', caption:'PAGASA\u2019s live press briefing on Facebook.' },
-      { type:'facebook', url:'https://www.facebook.com/share/p/1Bu2Pfue2t/' },
+      { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid02a8qosLJ3QAeJnZ5G3GRLMxYeNLBqsW8H7tSyYdP1b9y4mUofN6EBHEAyimp9vRc4l?rdid=MwNq4XocCFd5qjD5' },
       { type:'p', text:'In its 5 p.m. bulletin, the Philippine Atmospheric, Geophysical and Astronomical Services Administration (PAGASA) said the lowest storm level is up in the following areas:' },
-      { type:'p', text:'+Batanes ' },
-      { type:'p', text:'+Cagayan including Babuyan Islands' },
-      { type:'p', text:'+western and northern portions of Isabela' },
-      { type:'p', text:'+northwestern portion of Quirino' },
-      { type:'p', text:'+northern portion of Nueva Vizcaya ' },
-      { type:'p', text:'+Apayao' },
-      { type:'p', text:'+Abra ' },
-      { type:'p', text:'+Kalinga' },
-      { type:'p', text:'+Mountain Province ' },
-      { type:'p', text:'+Ifugao ' },
-      { type:'p', text:'+northern portion of Benguet ' },
-      { type:'p', text:'+Ilocos Norte' },
-      { type:'p', text:'+Ilocos Sur' },
+      { type:'list', items:[
+        'Batanes',
+        'Cagayan including Babuyan Islands',
+        'western and northern portions of Isabela',
+        'northwestern portion of Quirino',
+        'northern portion of Nueva Vizcaya',
+        'Apayao',
+        'Abra',
+        'Kalinga',
+        'Mountain Province',
+        'Ifugao',
+        'northern portion of Benguet',
+        'Ilocos Norte',
+        'Ilocos Sur',
+        'northern portion of La Union'
+      ] },
       { type:'p', text:'+northern portion of La Union' },
       { type:'p', text:'PAGASA warned of strong winds with minimal to minor impact.' },
       { type:'p', text:'It said heavy to intense rains are expected over Cagayan on Wednesday to Thursday, Sept. 18.' },
@@ -2850,7 +2898,7 @@
     title:'Weather Wednesday story',
     link: 'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid0eRWoz2j2jAotJAUn6nq53RdvGs3nTLcEk2fGVmBCmSdHuYd2XFCJbY2oxMxfmVVcl?rdid=WhoDI0xY8eAg2WHv', 
     pub:'NewsWatch Plus Philippines', 
-    dek:'2025 · NewsWatch Plus intern Kirstien Santos contributed to this report.', 
+    dek:'November 5 2025 · NewsWatch Plus intern Kirstien Santos contributed to this report.', 
     skills:['News Writing'], 
     published:true, 
     body:[
@@ -3087,6 +3135,20 @@
     }
   }
 
+  // YouTube needs no SDK — a plain iframe using its /embed/ path does
+  // the job. This pulls the video ID out of whatever URL shape the
+  // chip was given: a normal watch link, a shortened youtu.be link,
+  // or a Shorts link. Channel/handle links (e.g. /@name) have no
+  // video ID and fall through to null — see the click handler, which
+  // sends those straight out to YouTube instead of into the dialog.
+  function extractYouTubeId(url){
+    var m = url.match(/[?&]v=([\w-]{11})/)
+      || url.match(/youtu\.be\/([\w-]{11})/)
+      || url.match(/\/shorts\/([\w-]{11})/)
+      || url.match(/\/embed\/([\w-]{11})/);
+    return m ? m[1] : null;
+  }
+
   function socialEmbedMarkup(type, url){
     if(type === 'facebook'){
       var isVideo = /\/videos\/|\/share\/v\/|\/watch\/?\?v=|\/reel\//.test(url);
@@ -3097,6 +3159,20 @@
     }
     if(type === 'instagram'){
       return '<blockquote class="instagram-media" data-instgrm-permalink="' + url + '" data-instgrm-version="14" style="margin:0 auto;"></blockquote>';
+    }
+    if(type === 'youtube'){
+      var ytId = extractYouTubeId(url);
+      if(ytId){
+        return (
+          '<div class="youtube-embed-frame">' +
+            '<iframe src="https://www.youtube-nocookie.com/embed/' + ytId + '" ' +
+              'title="YouTube video player" frameborder="0" ' +
+              'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+              'allowfullscreen></iframe>' +
+          '</div>'
+        );
+      }
+      return '';
     }
     return '';
   }
@@ -3118,10 +3194,20 @@
     var chip = e.target.closest ? e.target.closest('[data-embed-type]') : null;
     if(!chip) return;
     e.preventDefault();
-    openSocialEmbed(chip.getAttribute('data-embed-type'), chip.getAttribute('data-embed-url'));
+    var chipType = chip.getAttribute('data-embed-type');
+    var chipUrl = chip.getAttribute('data-embed-url');
+    // A YouTube chip pointing at a channel/handle rather than a single
+    // video has nothing to embed (no video ID, no channel-embed SDK to
+    // load) — send it straight to YouTube in a new tab rather than
+    // opening the dialog on an empty frame.
+    if(chipType === 'youtube' && !extractYouTubeId(chipUrl)){
+      window.open(chipUrl, '_blank', 'noopener');
+      return;
+    }
+    openSocialEmbed(chipType, chipUrl);
   });
 
-  function caseFileBlockHtml(block){
+function caseFileBlockHtml(block){
     if(!block || !block.type) return '';
     if(block.type === 'p' && block.text){
       return '<p class="cf-p">' + block.text + '</p>';
@@ -3143,6 +3229,13 @@
         quoteText = '<a href="' + block.url + '" target="_blank" rel="noopener noreferrer">' + quoteText + '</a>';
       }
       return '<blockquote class="cf-pullquote">' + quoteText + '</blockquote>';
+    }
+    // A bulleted list — e.g. areas under a storm signal, a rundown of
+    // demands, etc. `items` is a flat array of strings.
+    if(block.type === 'list' && block.items && block.items.length){
+      return '<ul class="cf-list">' + block.items.map(function(item){
+        return '<li>' + item + '</li>';
+      }).join('') + '</ul>';
     }
     // An inline text link within the article body — e.g. "related
     // coverage on our Facebook page" — as opposed to a full embedded
