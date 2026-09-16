@@ -2145,11 +2145,11 @@
           </div>
           <div class="vtl-links">
             <button type="button" class="link-chip type-youtube" data-embed-type="youtube" data-embed-url="https://www.youtube.com/@CuttotheChase-News">
-              <svg viewBox="0 0 20 20"><path d="M12 4h2.2V1.2h-2.4C9.3 1.2 8 2.6 8 5v2H6v3h2v8h3v-8h2.3l.4-3H11V5c0-.6.3-1 1-1z"/></svg>
+              <svg viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 4h10a4 4 0 0 1 4 4v4a4 4 0 0 1-4 4H5a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4zM8 7v6l6-3-6-3z"/></svg>
               <span>Cut to the Chase</span>
             </button>
             <button type="button" class="link-chip type-youtube" data-embed-type="youtube" data-embed-url="https://www.youtube.com/shorts/UqaOip3n9rQ">
-              <svg viewBox="0 0 20 20"><path d="M6 2h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4zm0 1.8A2.2 2.2 0 0 0 3.8 6v8A2.2 2.2 0 0 0 6 16.2h8a2.2 2.2 0 0 0 2.2-2.2V6A2.2 2.2 0 0 0 14 3.8H6zM10 6.3A3.7 3.7 0 1 1 6.3 10 3.7 3.7 0 0 1 10 6.3zm0 1.8A1.9 1.9 0 1 0 11.9 10 1.9 1.9 0 0 0 10 8.1zm4-2.7a.9.9 0 1 1-.9.9.9.9 0 0 1 .9-.9z"/></svg>
+              <svg viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 4h10a4 4 0 0 1 4 4v4a4 4 0 0 1-4 4H5a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4zM8 7v6l6-3-6-3z"/></svg>
               <span>Video 1</span>
             </button>
             <a class="link-chip" href="https://thetrilby.wixsite.com/the-trilby" target="_blank" rel="noopener noreferrer">
@@ -3085,9 +3085,10 @@
   var CHIP_ICONS = {
     article: '<svg viewBox="0 0 20 20"><path d="M4 3h9l3 3v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm8 1v3h3l-3-3zM6 10h8v1.4H6V10zm0 3h8v1.4H6V13z"/></svg>',
     facebook: '<svg viewBox="0 0 20 20"><path d="M12 4h2.2V1.2h-2.4C9.3 1.2 8 2.6 8 5v2H6v3h2v8h3v-8h2.3l.4-3H11V5c0-.6.3-1 1-1z"/></svg>',
-    instagram: '<svg viewBox="0 0 20 20"><path d="M6 2h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4zm0 1.8A2.2 2.2 0 0 0 3.8 6v8A2.2 2.2 0 0 0 6 16.2h8a2.2 2.2 0 0 0 2.2-2.2V6A2.2 2.2 0 0 0 14 3.8H6zM10 6.3A3.7 3.7 0 1 1 6.3 10 3.7 3.7 0 0 1 10 6.3zm0 1.8A1.9 1.9 0 1 0 11.9 10 1.9 1.9 0 0 0 10 8.1zm4-2.7a.9.9 0 1 1-.9.9.9.9 0 0 1 .9-.9z"/></svg>'
+    instagram: '<svg viewBox="0 0 20 20"><path d="M6 2h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4zm0 1.8A2.2 2.2 0 0 0 3.8 6v8A2.2 2.2 0 0 0 6 16.2h8a2.2 2.2 0 0 0 2.2-2.2V6A2.2 2.2 0 0 0 14 3.8H6zM10 6.3A3.7 3.7 0 1 1 6.3 10 3.7 3.7 0 0 1 10 6.3zm0 1.8A1.9 1.9 0 1 0 11.9 10 1.9 1.9 0 0 0 10 8.1zm4-2.7a.9.9 0 1 1-.9.9.9.9 0 0 1 .9-.9z"/></svg>',
+    youtube: '<svg viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 4h10a4 4 0 0 1 4 4v4a4 4 0 0 1-4 4H5a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4zM8 7v6l6-3-6-3z"/></svg>'
   };
-  var CHIP_LABELS = { article:'Read Article', facebook:'Facebook Post', instagram:'Instagram Post' };
+  var CHIP_LABELS = { article:'Read Article', facebook:'Facebook Post', instagram:'Instagram Post', youtube:'YouTube Video' };
 
   function linkChipsHtml(links){
     if(!links || !links.length) return '';
@@ -3095,7 +3096,7 @@
       if(!l || !l.url) return '';
       var icon = CHIP_ICONS[l.type] || CHIP_ICONS.article;
       var label = l.label || CHIP_LABELS[l.type] || 'View Link';
-      if(l.type === 'facebook' || l.type === 'instagram'){
+      if(l.type === 'facebook' || l.type === 'instagram' || l.type === 'youtube'){
         return '<button type="button" class="link-chip type-' + l.type + '" data-embed-type="' + l.type + '" data-embed-url="' + l.url + '">' + icon + '<span>' + label + '</span></button>';
       }
       return '<a class="link-chip" href="' + l.url + '" target="_blank" rel="noopener noreferrer">' + icon + '<span>' + label + '</span></a>';
