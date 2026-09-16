@@ -1402,7 +1402,13 @@
      Instagram's own embed SDK expects, then hand off to that SDK to
      do the actual rendering once it's loaded.
      ------------------------------------------------------------ */
-  .cf-embed{ margin:28px 0; display:flex; justify-content:center; }
+  .cf-embed{ margin:28px 0; display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .cf-embed-fallback{
+    font-family:var(--mono); font-size:11px; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--ink-soft); text-decoration:none; border-bottom:1px solid rgba(255,217,218,.3);
+    padding-bottom:2px; transition:color .2s var(--ease), border-color .2s var(--ease);
+  }
+  .cf-embed-fallback:hover{ color:var(--ink); border-color:rgba(255,217,218,.7); }
   .cf-embed-placeholder{
     width:100%; max-width:500px; min-height:120px;
     display:flex; align-items:center; justify-content:center;
@@ -1563,6 +1569,29 @@
     position:absolute; bottom:16px; right:20px;
     font-family:var(--mono); font-size:10px; color:rgba(27,32,33,.45); letter-spacing:.04em;
   }
+
+  /* Scrapbook pages get the same cut-and-pasted deco layer the
+     sections use. Two adjustments for paper: the layer is clipped to
+     the page (already overflow:hidden) and every real child of the
+     page is lifted to z-index:1 so the photo, caption and buttons
+     always sit above the shapes. Shapes are also toned down a touch
+     since they sit on light --paper rather than the dark backdrop. */
+  .scrapbook-page .deco-layer{ z-index:0; }
+  .scrapbook-page .scrap-photo,
+  .scrapbook-page .scrap-kicker,
+  .scrapbook-page .scrap-title,
+  .scrapbook-page .scrap-type,
+  .scrapbook-page .scrap-skills{ position:relative; z-index:1; }
+  .scrapbook-page .scrap-page-num{ z-index:2; }
+  .scrapbook-page .deco-ring{ opacity:.3; }
+  .scrapbook-page .deco-disc{ opacity:.12; }
+  .scrapbook-page .deco-triangle{ opacity:.22; }
+  .scrapbook-page .deco-strip{ opacity:.22; }
+  .scrapbook-page .deco-zigzag{ opacity:.3; }
+  .scrapbook-page .deco-plus{ opacity:.3; }
+  .scrapbook-page .deco-wavy,
+  .scrapbook-page .deco-arrow{ opacity:.45; }
+  .scrapbook-page .washi{ opacity:.7; box-shadow:0 2px 6px rgba(0,0,0,.14); }
 
   /* The clone of whichever single page is turning. It's positioned
      with position:fixed to exactly overlay that one page (not the
@@ -1897,9 +1926,6 @@
       <button class="folder-tab" data-folder="Entertainment" role="tab" aria-selected="false" aria-controls="folderPanel" type="button">
         <span class="folder-tab-icon" aria-hidden="true"></span>Entertainment
       </button>
-      <button class="folder-tab" data-folder="Entertainment" role="tab" aria-selected="false" aria-controls="folderPanel" type="button">
-        <span class="folder-tab-icon" aria-hidden="true"></span>Entertainment
-      </button>
       <button class="folder-tab" data-folder="Weather" role="tab" aria-selected="false" aria-controls="folderPanel" type="button">
         <span class="folder-tab-icon" aria-hidden="true"></span>Weather
       </button>
@@ -2065,7 +2091,7 @@
                have them — Facebook/Instagram chips open the live post
                in a dialog; a plain article link just opens a new tab. -->
           <div class="vtl-links">
-            <button type="button" class="link-chip type-facebook" data-embed-type="facebook" data-embed-url="https://www.facebook.com/share/p/REPLACE-WITH-REAL-POST/">
+            <button type="button" class="link-chip type-facebook" data-embed-type="facebook" data-embed-url="https://www.facebook.com/photo.php?fbid=1326931169442212&set=pb.100063760254351.-2207520000&type=3">
               <svg viewBox="0 0 20 20"><path d="M12 4h2.2V1.2h-2.4C9.3 1.2 8 2.6 8 5v2H6v3h2v8h3v-8h2.3l.4-3H11V5c0-.6.3-1 1-1z"/></svg>
               <span>Facebook Recap</span>
             </button>
@@ -2570,7 +2596,7 @@
     { id:'secondhand-bookstores', genre:'Lifestyle', year:'2025', 
     title:'Are second-hand bookstores turning a new, digital page', 
     link: 'https://thetrilby.wixsite.com/the-trilby/aresecond-handbookstoresturninganew-digitalpage',
-    pub:'The Trilby', dek:'13 May 2025 · Kirstien Dominique Santos & Jan Alyanna Tamaray ', 
+    pub:'The Trilby', dek:'May 13 2025 · Kirstien Dominique Santos & Jan Alyanna Tamaray ', 
     skills:['News Writing', 'Canva'], 
     published:true, 
     body:[
@@ -2635,8 +2661,7 @@
       { type:'p', text:'The DOLE Central Visayas on Sunday, Oct. 5 said it issued the work stoppage order against the unnamed BPO company as its “Hazard identification, Risk Assessment, and Control” process did not cover any risks relating to natural calamities.' },
       { type:'p', text:'Other deficiencies included inconsistencies in the composition and operation of the firm’s safety and health committee and no implementation of a “No Construction Safety and Health Program” for the construction activities in one of the occupied floors of the company.' },
       { type:'p', text:'The DOLE Central Visayas also said that if the company fails to correct the violations, it will be meted a daily penalty not exceeding P100,000 per day after being notified of the order. The work stoppage order mandates companies to cease and desist operations until violations have been corrected and all unsafe conditions and acts exposing employees to imminent danger have been addressed. Workers from the BPO that were affected will be temporarily reassigned in a different area of operation or be allowed to do a flexible or alternative work setup.If not feasible, employers shall pay the affected workers their corresponding wages during the work stoppage period. The labor department also issued a notice of conference to another BPO company after a recent inspection found occupational safety and health (OSH) deficiencies. The orders came after several BPO employees filed a complaint to DOLE through the BPO Industry Employees’ Network Cebu, citing safety and labor rights violations.' },
-      { type:'pullquote', text:'READ: Cebu BPO workers file complaint over order to return to work after strong quake' },
-      { type:'p', text: 'https://www.newswatchplus.ph/2025/10/02/death-toll-in-cebu-earthquake-rises-to-72-ndrrmc/'},
+      { type:'pullquote', text:'READ: Cebu BPO workers file complaint over order to return to work after strong quake', url:'https://www.newswatchplus.ph/2025/10/02/death-toll-in-cebu-earthquake-rises-to-72-ndrrmc/' },
       { type:'p', text:'Cebu was hit with a 6.9 magnitude earthquake on Sept. 30, killing 72 people and injuring hundreds.'}
     ] },
 
@@ -2722,7 +2747,7 @@
     skills:['News Writing'], 
     published:true, 
     body:[
-      { type:'image', src:'assets/works/housing-1.jpg', caption:'Caption text' },
+      { type: 'facebook', url: 'https://www.facebook.com/reel/1351833209931785' },
       { type:'pullquote', text:'Metro Manila, Philippines - P-Pop boy group ALAMAT announced that its second album, “Destino,” will be released on Nov. 21.'},
       { type:'p', text:'ALAMAT performed an unreleased track as album teaser during its guesting for the MassKara Festival in Bacolod City on Sunday, Oct. 19.' },
       { type:'p', text:'“’Yung pinerform namin ngayon, ‘yun ‘yung hero track sa album namin. Handa na ba kayo para sa album namin?” main dancer Jao said to the crowd.'},
@@ -2734,55 +2759,122 @@
       
     ] },
 
-    { id:'inclusivity-ph-beauty', genre:'Lifestyle', year:'2023', 
+    { id:'inclusivity-ph-beauty', genre:'Lifestyle', year:'2025', 
     title:'INCLUSIVITY IN PH BEAUTY',
     pub:'Course: NEWS EDITING AND PRODUCTION', 
-    dek:'A FOIA-built database of state labor complaints becomes the spine of a three-part accountability series.', 
+    dek:'2025 · Kirstien Dominique Santos', 
     skills:['News Writing'], 
     published:'coursework', 
     body:[
-      { type:'p', text:'Full first paragraph of the article...' },
-      { type:'p', text:'Next paragraph...' },
-      { type:'pullquote', text:'A standout line from the piece.' }
+      { type:'pullquote', text:'Finding the right shade: can Filipinos finally spot their skin tone?'},
+      { type:'p', text:'Inclusivity wasn’t always a forefront of the Filipino beauty industry admittedly, especially in a society where western features had and maybe still has its people on a chokehold.' },
+      { type:'p', text:'Now, the beauty space has been making incredible strides to be more inclusive, with brands like GRWM Cosmetics and Colourette being one of the trailblazers for Filipino makeup. Skincare brands like Saipo and +ful are also making products more morena-friendly, avoiding terms such as “whitening” in advertisements.  ' },
+      { type:'p', text:'But are these measures enough? Has the industry finally deprogrammed their colorist lens? Or is it merely a marketing plot? ' },
+
+      { type:'pullquote', text:'Rewinding time'},
+      { type:'p', text:'To truly understand how the beauty industry has pivoted to where it is today, it’s important to look back onto what beauty essentially was back then.'  },
+      { type:'p', text:'The beauty standards in precolonial Philippines reflected onto the concept of fertility. Makeup artist Abigail Mae Ofrasio pointed out that thinness wasn’t even a concept that was acceptable back then as women’s beauty was based on whether they could have children or not. Women who looked “fuller” were considered “healthier” as they were believed to bear more children.'  },
+      { type:'p', text:'“Indigenous women were tanned and morena,” Ofrasio said in a YouTube video about the History of Beauty in the Philippines. “Then the Spaniards came and they somehow patterned the Filipina into a meek and submissive individual.”'  },
+      { type:'p', text:'The Spanish colonial era was the introduction of the mestiza beauty standard. Ofrasio pointed out that it is also when beauty started to define one’s social status in the country. '  },
+      { type:'p', text:'American imperialism also influenced the standards as flashy, glam looks shined during the golden age of cinema in the 1920s. From mestiza actresses to Audrey Hepburn’s style, it was clear that the morena beauty had to take a backseat.'  },
+      { type:'p', text:'Fast forward to modern times, Ofrasio said that the media is incredibly influential on perpetuating foreign beauty standards.'  },
+      { type:'p', text:'“There were so many advertisements of whitening products because of the influx of Taiwanese [women] and Koreans [in the media],” she said.'  },
+      { type:'p', text:'In a country where movies and teleseryes usually starred actresses who weren\u2019t pure Filipinos and had foreign characteristics, it was difficult to embrace one\u2019s natural features. '  },
+
+      { type:'pullquote', text:'What do Filipinos think now? ? '},
+      { type:'p', text:'In an era where brands claim to be more inclusive for all skin tones, ages, and genders, do Filipinos actually feel represented?'  },
+      { type:'p', text:'Jana Regina Enconado, 20, said that the Philippine beauty industry is still progressing, only at a much slower pace, especially as a morena.'  },
+      { type:'p', text:'“Filipino beauty has been more exposed than usual,” Enconado said in a Messenger interview. “Our features are more seen [in] beauty products.”'  },
+      { type:'p', text:'Though Enconado uses more local brands now, it’s still a constant struggle to find the right shade for base products like foundation and concealer. '  },
+      { type:'p', text:'Cosplayer Ma. Razielle Romilla acknowledged the Filipino beauty industry’s attempt at diversity.'  },
+      { type:'p', text:'“Filipino beauty is very accessible now,” Romilla said.'  },
+      { type:'p', text:'However, she said that she still struggles to find the right shade like Enconado, despite being fair-skinned. This stems from the industry’s lack of understanding when it comes to creating shades that cater to different undertones as most shades either come up as too orange or pasty. '  },
+      { type:'p', text:'For Beatriz Mallari, 20, the Philippines is definitely becoming more inclusive.'  },
+      { type:'p', text:'“It’s becoming more inclusive and the quality of beauty products is getting better,” Mallari said in an interview. “I seldomly encounter advertisements that promote whitening [products] now.”'  },
+      { type:'p', text:'Mallari however also remarked that it’s still a struggle to pick out the right shade in terms of base products like Enconado and Romilla.'  },
+      { type:'p', text:'Romilla also pointed out that advertisements failed to reflect the measures of the industry to market towards Filipinos. '  },
+      { type:'p', text:'“I don’t look like any popular influencer or celebrity, so when they advertise a product, it’s hard for me to feel connected or interested,” she said.'  },
+      { type:'p', text:'Mallari on the other hand feels that the industry lacks in setting itself apart from its international counterparts.'  },
+      { type:'p', text:'“Don’t just imitate international brands,” she said.'  },
+      
+      { type:'pullquote', text:'Are we truly inclusive?  '},
+      { type:'p', text:'For Romilla, inclusivity isn’t far-fetched, noting the efforts of modern brands to listen to their consumers. Exploring different skin types and product formulations is also something that should be kept in mind to truly reach inclusivity in beauty.'  },
+      { type:'p', text:'Mallari said that more consultations towards their target market should be done. To show that it isn’t all just about marketing, there should be considerable actions taken in order to fulfill the needs of finding a product that truly works.'  },
+      { type:'p', text:'Being a Filipino beauty enthusiast now is definitely better, according to Ofrasio. In a time where whitening products reigned supreme, she is enthusiastic about the steps that Filipino brands are taking.'  },
+      { type:'p', text:'Whether the beauty industry is inclusive now is up to the consumers. Though it is long overdue, the direction of the Filipino beauty space appears to be miles better.'  }
     ] },
 
-    { id:'unesco-bohol-asin-tibuok', genre:'Culture', year:'2023', 
+    { id:'unesco-bohol-asin-tibuok', genre:'Culture', year:'2025', 
     title:'UNESCO Bohol\u2019s Asin Tibuok, need of urgent safeguarding', 
-    pub:'NewsWatch Plus Philippines', dek:'A FOIA-built database of state labor complaints becomes the spine of a three-part accountability series.', 
+    link: '',
+    pub:'NewsWatch Plus Philippines', 
+    dek:'December 10 2025 · NewsWatch Plus intern Kirstien Santos contributed to this report.', 
     skills:['News Writing'], 
     published:true, 
     body:[
-      { type:'p', text:'Full first paragraph of the article...' },
-      { type:'image', src:'assets/works/housing-1.jpg', caption:'Caption text' },
-      { type:'p', text:'Next paragraph...' },
-      { type:'pullquote', text:'A standout line from the piece.' }
+      { type:'image', src:'assets/Asin-Tibuok.png', caption:'Asin Tibuok, or whole salt, made in Bohol island. (UNESCO/Youtube)' },
+      { type:'pullquote', text:'Metro Manila, Philippines – The United Nations Educational, Scientific and Cultural Organization (UNESCO) inscribed the making of Asin Tibuok, the artisanal sea salt of Bohol, into the List of Intangible Cultural Heritage in Need of Urgent Safeguarding on Tuesday, Dec. 10.' },
+      { type:'p', text:'The practice of filtering seawater through the ashes of charred coconut husks is the first Philippine traditional food process to ever be included in an UNESCO intangible cultural heritage (ICN) list. ' },
+
+      { type:'p', text:'The list includes practices that are at serious risk of disappearing completely due to social or environmental change.' },
+      { type:'p', text:'Safeguarding refers to any measure made to strengthen and reinforce “the diverse and varied circumstances” needed for continuous evolution and interpretation of intangible cultural heritage, especially its transmission to future generations.' },
+      { type:'p', text:'The traditional salt-making process is a labor-intensive procedure passed down to generations. The process to make Asin Tibuok – described to have a sharp taste with smoky and fruity undertones – can only be carried out from December to May due to the fluctuations in seawater salinity during the rainy season. ' },
+      { type:'p', text:'The National Museum of the Philippines celebrated the inscription, calling it “a well-deserved and long-overdue recognition for Alburquerque’s mang-asinay, whose dedication has kept this important heritage alive across generations.” ' },
+      { type:'p', text:'It added that the recognition calls on the government to work closely with the community to support the industry, uphold their role as economic and cultural drivers, and ensure its survival as a living testament to resilience and identity.' },
+      { type:'p', text:'The inscription is the sixth overall for the country after the hudhud chants of the Ifugao (inscribed in 2008), Darangen epic of the Meranaw people of Lake Lanao (2008), Punnuk tugging game of the Ifugao (2015) and Aklan piña handloom weaving (2023) in the Representative List of the Intangible Cultural Heritage of Humanity; the Subanen ritual buklog (2019) in the Urgent Safeguarding list; and the School of Living Traditions (2021) in the Register of Good Safeguarding Practices.' }
+
     ] },
 
-    { id:'weather-extended-weekend-pagasa', genre:'Weather', year:'2023', 
+    { id:'weather-extended-weekend-pagasa', genre:'Weather', year:'2025', 
     title:'Weather systems to bring rains in extended weekend - PAGASA', 
-    pub:'NewsWatch Plus Philippines', dek:'A FOIA-built database of state labor complaints becomes the spine of a three-part accountability series.', 
+    link: 'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid0wZsbrZE7Njg61j9DBHz1945yWZUUeToXZ1ouedHHi1xoqhnGh5STXiC1ppkgwooXl?rdid=qDTZtzkgphHlpjL6',
+    pub:'NewsWatch Plus Philippines', 
+    dek:'October 29 2025 · NewsWatch Plus intern Kirstien Santos contributed to this report.', 
     skills:['News Writing'], 
     published:true, 
     body:[
-      { type:'p', text:'Full first paragraph of the article...' },
-      { type:'image', src:'assets/works/housing-1.jpg', caption:'Caption text' },
-      { type:'p', text:'Next paragraph...' },
-      { type:'pullquote', text:'A standout line from the piece.' }
+      { type:'image', src:'assets/weather-1.1.png'},
+      { type:'pullquote', text:'Metro Manila, Philippines - It will be a rainy observance for All Saints and All Souls day holidays, the weather bureau said on Tuesday, Oct. 28. ' },
+      { type:'p', text:'In a forecast, the Philippine Atmospheric, Geophysical and Astronomical Services Administration (PAGASA) said the northeast monsoon or “amihan” will bring cloudy skies with rains over Batanes and the Babuyan Islands on Thursday until Friday, Oct. 31. ' },
+      { type:'p', text:'Isolated rains are also expected over Apayao, Abra, and Ilocos Norte. ' },
+      { type:'p', text:'PAGASA said a low pressure forming east of the Visayas and trade winds will bring cloudy skies with scattered rains over the Visayas, Mindanao, Metro Manila, Calabarzon, Mimaropa, central Luzon, the rest of Cagayan Valley, La Union, and Pangasinan.' },
+      { type:'p', text:'Other parts of Luzon are expected to have isolated rain showers or thunderstorms from partly cloudy to cloudy skies, it added.' },
+      { type: 'facebook', url: 'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid0wZsbrZE7Njg61j9DBHz1945yWZUUeToXZ1ouedHHi1xoqhnGh5STXiC1ppkgwooXl?rdid=GTLBIG3wiPX61nqK' },
+      { type:'p', text:'On Nov. 1, PAGASA said scattered rains and thunderstorms are expected over the Visayas, Metro Manila, Calabarzon, Mimaropa, Bicol, Aurora, and the Zamboanga Peninsula.' },
+      { type:'p', text:'Isolated light rains may occur in the Ilocos region and Cordillera Administrative Region, and localized rain showers or thunderstorms for the rest of the country.' },
+      { type:'p', text:'On Nov. 2 or All Souls’ Day, PAGASA forecast cloudy skies with scattered rains and isolated thunderstorms over Mimaropa, Calabarzon, Bicol, and Western Visayas.' },
+      { type:'p', text:'The northeast monsoon will bring isolated light rains over the Ilocos region. Other parts of the country may have afternoon or evening rain showers or thunderstorms.' }
     ] },
 
-    { id:'weather-wednesday-story', genre:'Weather', year:'2023', 
-    title:'Weather Wednesday story', 
-    pub:'NewsWatch Plus Philippines', dek:'A FOIA-built database of state labor complaints becomes the spine of a three-part accountability series.', 
+    { id:'weather-wednesday-story', genre:'Weather', year:'2025', 
+    title:'Weather Wednesday story',
+    link: 'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid0eRWoz2j2jAotJAUn6nq53RdvGs3nTLcEk2fGVmBCmSdHuYd2XFCJbY2oxMxfmVVcl?rdid=WhoDI0xY8eAg2WHv', 
+    pub:'NewsWatch Plus Philippines', 
+    dek:'2025 · NewsWatch Plus intern Kirstien Santos contributed to this report.', 
     skills:['News Writing'], 
     published:true, 
     body:[
-      { type:'p', text:'Full first paragraph of the article...' },
-      { type:'image', src:'assets/works/housing-1.jpg', caption:'Caption text' },
-      { type:'p', text:'Next paragraph...' },
-      { type:'pullquote', text:'A standout line from the piece.' }
+      { type:'pullquote', text:'‘Tino’ moves away from land, Palawan still under threat' },
+      { type:'image', src:'assets/weather-1.1.png'},
+      { type:'p', text:'Signal No. 2 was still up over Kalayaan Islands in the West Philippine Sea as Typhoon #TinoPH further intensified over water on Wednesday afternoon. ' },
+      { type:'p', text:'Meanwhile, PAGASA warned as early as now that a possible super typhoon may hit land in northern or central Luzon on Monday.' },
+      { type:'pullquote', text:'Metro Manila, Philippines - Signal No. 2 was still up in Kalayaan Islands in the West Philippine Sea as Typhoon Tino (international name: Kalmaegi) further intensified over water on Wednesday afternoon, Nov. 5, the weather bureau said. ' },
+      { type:'p', text: 'Signal No. 1 was also up in Occidental Mindoro including Lubang Islands and the rest of Palawan including Calamian and Cuyo Islands, the Philippine Atmospheric, Geophysical and Astronomical Services Administration (PAGASA) said in its 5 p.m. bulletin. '},
+      { type:'p', text: 'Palawan may still encounter heavy rain until Thursday afternoon, PAGASA said, adding that there was still “minimal to moderate risk of storm surge” to the province’s coastal towns.'},
+      { type:'p', text: 'The trough of the typhoon will bring rains to other parts of the country.'},
+      { type:'p', text: 'Strong gusts were forecast over Batanes, Babuyan Islands, Ilocos Norte, Zambales, Bataan, Batangas, Oriental Mindoro, Marinduque, Romblon, and Antique.'},
+      { type:'p', text: '“Tino” was packing maximum sustained winds of 140 kilometers per hour (kph) near the center and gustiness of up to 170 kph. It is seen to re-intensify as it leaves the Philippine Area of Responsibility  by Wednesday evening or Thursday, heading to Vietnam.'},
+
+      { type: 'facebook', url: 'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid0eRWoz2j2jAotJAUn6nq53RdvGs3nTLcEk2fGVmBCmSdHuYd2XFCJbY2oxMxfmVVcl?rdid=WhoDI0xY8eAg2WHv' },
+      { type:'pullquote', text: 'Incoming storm'},
+      { type:'p', text: 'Meanwhile, PAGASA said it is also monitoring a tropical depression last spotted south of Guam.'},
+      { type:'p', text: 'The latest forecast showed it will enter the PAR as a typhoon by Friday evening or Sunday and it will be named “Uwan.”'},
+      { type:'p', text: 'By Monday, it may hit land in northern or central Luzon as a super typhoon.'},
+      { type:'p', text: '“As early as Sunday afternoon or evening, posibleng magkaroon ng interaksyon or effect na dito sa parteng Eastern Visayas and Bicol region,” PAGASA weather specialist Benison Estareja said.'},
+      { type:'p', text: '[Translation: As early as Sunday afternoon or evening, the tropical cyclone may have an effect in parts of Eastern Visayas and Bicol region.]'},
     ] }
   ];
-  var genreLabels = { housing:'Housing', labor:'Labor', systems:'Public Systems', data:'Data & FOIA' };
+  var genreLabels = { Local:'Local', Lifestyle:'Lifestyle', Entertainment:'Entertainment', Weather:'Weather', Affairs:'Current Affairs', Culture:'Culture', };
 
   var folderTabs = document.querySelectorAll('.folder-tab');
   var folderPanel = document.getElementById('folderPanel');
@@ -2997,12 +3089,14 @@
 
   function socialEmbedMarkup(type, url){
     if(type === 'facebook'){
-      return '<div class="fb-post" data-href="' + url + '" data-width="500"></div>' +
-        '<div class="cf-embed-placeholder">Facebook post — loads once this page is live on the internet with a real Facebook URL.</div>';
+      var isVideo = /\/videos\/|\/share\/v\/|\/watch\/?\?v=|\/reel\//.test(url);
+      if(isVideo){
+        return '<div class="fb-video" data-href="' + url + '" data-width="500" data-show-text="false" data-allowfullscreen="true"></div>';
+      }
+      return '<div class="fb-post" data-href="' + url + '" data-width="500"></div>';
     }
     if(type === 'instagram'){
-      return '<blockquote class="instagram-media" data-instgrm-permalink="' + url + '" data-instgrm-version="14" style="margin:0 auto;"></blockquote>' +
-        '<div class="cf-embed-placeholder">Instagram post — loads once this page is live on the internet with a real Instagram URL.</div>';
+      return '<blockquote class="instagram-media" data-instgrm-permalink="' + url + '" data-instgrm-version="14" style="margin:0 auto;"></blockquote>';
     }
     return '';
   }
@@ -3044,7 +3138,11 @@
       );
     }
     if(block.type === 'pullquote' && block.text){
-      return '<blockquote class="cf-pullquote">' + block.text + '</blockquote>';
+      var quoteText = block.text;
+      if(block.url){
+        quoteText = '<a href="' + block.url + '" target="_blank" rel="noopener noreferrer">' + quoteText + '</a>';
+      }
+      return '<blockquote class="cf-pullquote">' + quoteText + '</blockquote>';
     }
     // An inline text link within the article body — e.g. "related
     // coverage on our Facebook page" — as opposed to a full embedded
@@ -3056,7 +3154,19 @@
     // article's own flow — see socialEmbedMarkup for the actual markup
     // each platform's SDK expects.
     if((block.type === 'facebook' || block.type === 'instagram') && block.url){
-      return '<div class="cf-embed">' + socialEmbedMarkup(block.type, block.url) + '</div>';
+      // Facebook/Instagram's SDK gives no JS-visible error when it
+      // refuses to render a post (private, embed-restricted, or —
+      // commonly with Reels — just unsupported for that account), so
+      // the widget can silently stay blank. A plain fallback link
+      // underneath means the post is still reachable either way.
+      var platformLabel = block.type === 'facebook' ? 'Facebook' : 'Instagram';
+      return (
+        '<div class="cf-embed">' + socialEmbedMarkup(block.type, block.url) +
+          '<a class="cf-embed-fallback" href="' + block.url + '" target="_blank" rel="noopener noreferrer">' +
+            'View on ' + platformLabel + ' ↗' +
+          '</a>' +
+        '</div>'
+      );
     }
     return '';
   }
@@ -3105,8 +3215,14 @@
       caseFileArticle.hidden = false;
       // Any Facebook/Instagram post embedded directly in the body
       // needs that platform's SDK loaded once the markup is in the DOM.
-      if(w.body.some(function(b){ return b.type === 'facebook'; })){ loadSocialSdk('facebook'); }
-      if(w.body.some(function(b){ return b.type === 'instagram'; })){ loadSocialSdk('instagram'); }
+      // Crucially, this has to happen AFTER the dialog is actually
+      // visible: the Facebook video plugin computes its iframe size
+      // once, at parse time, from the container's current layout. If
+      // we parse while the <dialog> is still closed (display:none),
+      // it locks in a 0-width/0-height iframe that never recovers —
+      // that's what produced the collapsed "0 x 20" reel embeds.
+      var needsFacebook = w.body.some(function(b){ return b.type === 'facebook'; });
+      var needsInstagram = w.body.some(function(b){ return b.type === 'instagram'; });
     } else {
       caseFileArticle.innerHTML = '';
       caseFileArticle.hidden = true;
@@ -3127,6 +3243,18 @@
     if(bodyEl){ bodyEl.scrollTop = 0; }
 
     openDialogAnimated(caseFileDialog);
+
+    // Parse social embeds only once the dialog has a real, visible
+    // layout — see the comment above where needsFacebook/needsInstagram
+    // are computed. showModal() runs synchronously above, but we still
+    // wait a frame so the browser has actually painted the new layout
+    // before Facebook/Instagram measure it.
+    if(needsFacebook || needsInstagram){
+      requestAnimationFrame(function(){
+        if(needsFacebook){ loadSocialSdk('facebook'); }
+        if(needsInstagram){ loadSocialSdk('instagram'); }
+      });
+    }
   }
   wireDialogClose(caseFileDialog);
 
@@ -3134,11 +3262,20 @@
      CREATIVE DESIGN GALLERY — grid + filmstrip lightbox
      --------------------------------------------------------- */
   var designData = [
-    { title:'Miss Universe 2025', type:'Editorial Design \u00b7 2025', skills:['Graphic Design','Editorial Judgment'], img:'assets/missuniv.png' },
-    { title:'[THE TRILBY] INTRO-Trilby Asks (Horizontal)', type:'Motion / Video \u00b7 2023', skills:['Graphic Design','Layout & Typography'], video:'assets/[THE TRILBY] INTRO-Trilby Asks (Horizontal).mp4' },
-    { title:'[THE TRILBY] INTRO-Trilby Asks (Vertical)', type:'Motion / Video \u00b7 2022', skills:['Adobe Premiere','Graphic Design'], video:'assets/[THE TRILBY] INTRO-Trilby Asks (Vertical).mp4' },
+    { title:'Miss Universe 2025', type:'Editorial Design \u00b7 2025', skills:['Graphic Design'], img:'assets/missuniv.png' },
+    { title:'[THE TRILBY] INTRO-Trilby Asks (Horizontal)', type:'Motion / Video \u00b7 2023', skills:['Graphic Design'], video:'assets/[THE TRILBY] INTRO-Trilby Asks (Horizontal).mp4' },
+    { title:'[THE TRILBY] INTRO-Trilby Asks (Vertical)', type:'Motion / Video \u00b7 2022', skills:['Adobe Premiere'], video:'assets/[THE TRILBY] INTRO-Trilby Asks (Vertical).mp4' },
     { title:'Trillby', type:'Logo \u00b7 2025', skills:['Layout & Typography','Graphic Design'], img:'assets/Trilby t logo.png' },
-    { title:'LTR-PRICE-HIKE-PUBMAT THE TRILBY', type:'Infographics \u00b7 2024', skills:['Data Journalism','Datawrapper / Flourish','Graphic Design'], img:'assets/LTR-PRICE-HIKE-PUBMAT_THE TRILBY.png' }
+    { title:'LTR-PRICE-HIKE-PUBMAT THE TRILBY', type:'Infographics \u00b7 2024', skills:['Graphic Design'], img:'assets/LTR-PRICE-HIKE-PUBMAT_THE TRILBY.png' },
+    { title:'shirt-design', type:'Merchandise Design \u00b7 2024', skills:['Graphic Design'], img:'assets/shirt-design.png' },
+    { title:'beep-1', type:'Infographics \u00b7 2024', skills:['Graphic Design'], img:'assets/beep-1.png' },
+    { title:'beep-2', type:'Infographics \u00b7 2024', skills:['Graphic Design'], img:'assets/beep-2.png' },
+    { title:'lanyard', type:'Infographics \u00b7 2024', skills:['Graphic Design'], img:'assets/lanyard.png' },
+    { title:'e-sports-2024', type:'Infographics \u00b7 2024', skills:['Graphic Design'], img:'assets/e-sports-2024.png' },
+    { title:'coverage-2024', type:'Infographics \u00b7 2024', skills:['Graphic Design'], img:'assets/coverage-2024.png' },
+    { title:'bacc-banner-2024', type:'Infographics \u00b7 2024', skills:['Graphic Design'], img:'assets/bacc-banner-2024.png' },
+    { title:'intro-2023', type:'Infographics \u00b7 2024', skills:['Graphic Design'], video:'assets/intro-2023.mp4' },
+    { title:'cttc-clock', type:'Infographics \u00b7 2024', skills:['Graphic Design'], video:'assets/cttc-clock.mp4' },
   ];
 
   // Small skill-tag chips shared by both the folder cards (Previous
@@ -3207,11 +3344,63 @@
     }).join('') + '</div>';
   }
 
+  /* The same zine deco vocabulary the sections use (.deco-shape
+     ring / disc / triangle / strip / plus / zigzag / wavy / arrow
+     plus washi tape), reused on the scrapbook pages. Three arrangements
+     cycle by frame index so consecutive spreads never look identical,
+     and each side keeps its shapes clear of where the photo and the
+     caption text actually sit. */
+  var SCRAP_WAVY_SVG = '<svg viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10 Q14 0 26 10 T50 10 T74 10 T98 10" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/></svg>';
+  var SCRAP_ARROW_SVG = '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><path d="M8 12 C10 40 30 50 48 42" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M38 36 L48 42 L44 54" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  var SCRAP_DECO = {
+    left: [
+      '<span class="deco-shape deco-ring" style="color:var(--acc-design); width:96px; height:96px; bottom:-18px; left:-22px;"></span>' +
+      '<span class="deco-shape deco-zigzag" style="color:var(--acc-work); width:78px; height:12px; bottom:38px; right:8%; transform:rotate(-5deg);"></span>' +
+      '<span class="deco-shape deco-wavy" style="color:var(--rose); width:96px; height:18px; bottom:14px; left:14%;">' + SCRAP_WAVY_SVG + '</span>' +
+      '<span class="washi washi-stripe" style="color:var(--acc-design); width:56px; height:16px; top:8px; left:6%; transform:rotate(-9deg);"></span>',
+
+      '<span class="deco-shape deco-disc" style="color:var(--acc-skills); width:88px; height:88px; bottom:-10px; right:-16px;"></span>' +
+      '<span class="deco-shape deco-triangle" style="color:var(--acc-design); bottom:32px; left:8%; --tri-size:15px;"></span>' +
+      '<span class="deco-shape deco-strip" style="color:var(--acc-work); width:104px; bottom:20px; left:26%; transform:rotate(-6deg);"></span>' +
+      '<span class="washi washi-dot" style="color:var(--rose); width:50px; height:15px; top:6px; right:7%; transform:rotate(7deg);"></span>',
+
+      '<span class="deco-shape deco-arrow" style="color:var(--wine); width:52px; height:52px; bottom:26px; right:12%; transform:rotate(200deg);">' + SCRAP_ARROW_SVG + '</span>' +
+      '<span class="deco-shape deco-plus" style="color:var(--acc-contact); width:18px; height:18px; bottom:60px; left:9%;"></span>' +
+      '<span class="deco-shape deco-ring" style="color:var(--acc-experience); width:60px; height:60px; bottom:6px; left:22%;"></span>' +
+      '<span class="washi washi-stripe" style="color:var(--acc-work); width:48px; height:15px; top:10px; right:9%; transform:rotate(-6deg);"></span>'
+    ],
+    right: [
+      '<span class="deco-shape deco-disc" style="color:var(--acc-design); width:104px; height:104px; top:-24px; right:-20px;"></span>' +
+      '<span class="deco-shape deco-strip" style="color:var(--acc-skills); width:120px; bottom:24%; right:-10px; transform:rotate(5deg);"></span>' +
+      '<span class="deco-shape deco-triangle down" style="color:var(--acc-contact); bottom:16%; left:6%; --tri-size:16px;"></span>' +
+      '<span class="washi washi-dot" style="color:var(--rose); width:58px; height:16px; bottom:8%; right:18%; transform:rotate(-7deg);"></span>',
+
+      '<span class="deco-shape deco-ring" style="color:var(--acc-work); width:110px; height:110px; bottom:-26px; right:-24px;"></span>' +
+      '<span class="deco-shape deco-wavy" style="color:var(--acc-design); width:86px; height:16px; bottom:16%; left:8%;">' + SCRAP_WAVY_SVG + '</span>' +
+      '<span class="deco-shape deco-plus" style="color:var(--acc-skills); width:20px; height:20px; top:12%; right:10%;"></span>' +
+      '<span class="washi washi-stripe" style="color:var(--acc-contact); width:60px; height:17px; bottom:6%; left:26%; transform:rotate(5deg);"></span>',
+
+      '<span class="deco-shape deco-zigzag" style="color:var(--acc-experience); width:74px; height:11px; top:8%; right:6%; transform:rotate(4deg);"></span>' +
+      '<span class="deco-shape deco-disc" style="color:var(--acc-contact); width:76px; height:76px; bottom:10%; left:-18px;"></span>' +
+      '<span class="deco-shape deco-arrow" style="color:var(--wine); width:48px; height:48px; bottom:18%; right:14%; transform:rotate(30deg) scaleX(-1);">' + SCRAP_ARROW_SVG + '</span>' +
+      '<span class="washi washi-dot" style="color:var(--acc-design); width:52px; height:16px; bottom:5%; right:34%; transform:rotate(6deg);"></span>'
+    ]
+  };
+
+  function scrapDecoLayerHtml(side, index){
+    var set = SCRAP_DECO[side];
+    return '<div class="deco-layer" aria-hidden="true">' +
+      set[((index % set.length) + set.length) % set.length] +
+    '</div>';
+  }
+
   function scrapbookSpreadHtml(index){
     var d = designData[index];
     var photoMedia = designMediaHtml(d, { controls: true });
     return (
       '<div class="scrapbook-page scrapbook-page-left">' +
+        scrapDecoLayerHtml('left', index) +
         '<span class="scrap-tape" aria-hidden="true"></span>' +
         '<div class="scrap-photo">' + photoMedia +
           '<span class="scrap-photo-tag">FRAME 0' + (index + 1) + '</span>' +
@@ -3220,6 +3409,7 @@
       '</div>' +
       '<div class="scrapbook-spine" aria-hidden="true"></div>' +
       '<div class="scrapbook-page scrapbook-page-right">' +
+        scrapDecoLayerHtml('right', index) +
         '<span class="scrap-kicker">Design &amp; Visual</span>' +
         '<h3 class="scrap-title">' + d.title + '</h3>' +
         '<div class="scrap-type">' + d.type + '</div>' +
