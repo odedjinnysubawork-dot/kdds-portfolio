@@ -1352,6 +1352,78 @@
   }
   .folder-card .item-skills{ margin-top:10px; }
 
+  /* ------------------------------------------------------------
+     LINK CHIPS — small pill buttons used in two places: the case
+     file dialog (a work's "Read the article" / "Facebook post" /
+     etc.) and each Experience vtl-card ("proof of work" links under
+     President, etc.). Plain links (type "article"/"facebook-page")
+     are real <a> tags that just open in a new tab; "facebook" and
+     "instagram" ones are <button>s tagged data-embed-type/-url, and
+     a single delegated click handler (see the router script) opens
+     the live post in the social-embed dialog instead of leaving the
+     site, lazy-loading that platform's embed SDK only when needed.
+     ------------------------------------------------------------ */
+  .link-chip-row{ display:flex; flex-wrap:wrap; gap:10px; }
+  .link-chip{
+    display:inline-flex; align-items:center; gap:7px;
+    font-family:var(--mono); font-size:10px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--paper); background:rgba(255,217,218,.05);
+    border:1px solid rgba(255,217,218,.25);
+    padding:8px 13px; border-radius:2px;
+    cursor:pointer; text-decoration:none;
+    transition:background .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease);
+  }
+  .link-chip:hover{ background:var(--wine); border-color:var(--wine); transform:translateY(-1px); }
+  .link-chip svg{ width:13px; height:13px; flex:0 0 auto; fill:currentColor; }
+  .link-chip.type-facebook:hover{ background:#1877f2; border-color:#1877f2; }
+  .link-chip.type-instagram:hover{ background:#c8317a; border-color:#c8317a; }
+
+  /* Experience vtl-card additions: a row of skill chips (same look as
+     the folder/design cards) and, below that, the link-chip row for
+     any social proof of the work — separated from the bullet list by
+     a thin dashed rule so they read as two distinct footnotes rather
+     than more list content. */
+  .vtl-skills{
+    display:flex; flex-wrap:wrap; gap:6px;
+    margin-top:18px; padding-top:16px;
+    border-top:1px dashed rgba(255,217,218,.16);
+  }
+  .vtl-links{
+    display:flex; flex-wrap:wrap; gap:10px;
+    margin-top:14px;
+  }
+  .vtl-links:first-child{ border-top:none; padding-top:0; margin-top:0; }
+
+  /* ------------------------------------------------------------
+     SOCIAL EMBEDS — inline, inside an article's own body (see
+     caseFileBlockHtml's "facebook"/"instagram" block types), and the
+     lightweight dialog that a vtl-card or case-file link-chip opens
+     into instead. Both just host whatever markup Facebook's/
+     Instagram's own embed SDK expects, then hand off to that SDK to
+     do the actual rendering once it's loaded.
+     ------------------------------------------------------------ */
+  .cf-embed{ margin:28px 0; display:flex; justify-content:center; }
+  .cf-embed-placeholder{
+    width:100%; max-width:500px; min-height:120px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:11px; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--ink-soft); border:1px dashed rgba(255,217,218,.25);
+    text-align:center; padding:20px;
+  }
+  .social-embed-dialog{
+    width:min(560px, 92vw); max-height:88vh; overflow:hidden;
+    position:fixed; inset:0; margin:auto;
+    background:var(--ink); border:1px solid rgba(255,217,218,.2);
+    opacity:0; transform:translateY(18px) scale(.96);
+    transition:opacity .3s var(--ease), transform .3s var(--ease);
+    box-shadow:var(--paper-shadow);
+    padding:36px 20px 20px;
+  }
+  .social-embed-dialog[open]{ display:block; }
+  .social-embed-dialog.is-open{ opacity:1; transform:translateY(0) scale(1); }
+  .social-embed-body{ display:flex; justify-content:center; overflow-y:auto; max-height:calc(88vh - 56px); }
+  .social-embed-body .cf-embed-placeholder{ margin:40px auto; }
+
   /* Hovering (or tabbing to) a skill tag on the Skills page: the tag
      itself gets a subtle "has matches" glow, and this floating panel
      lists whichever stories or design pieces carry that tag. Clicking
@@ -1860,12 +1932,20 @@
     <h3 class="case-file-title" id="caseFileTitle">Title</h3>
     <div class="case-file-meta" id="caseFileMeta"><!-- populated by JS --></div>
     <p class="case-file-dek" id="caseFileDek">Excerpt goes here.</p>
+    <div class="link-chip-row" id="caseFileLinks" style="margin-top:18px;"></div>
     <div class="case-file-article" id="caseFileArticle" hidden><!-- populated by JS when a work has a `body` --></div>
     <div class="case-file-skills" id="caseFileSkills" hidden>
       <div class="case-file-skills-label">Skills applied</div>
       <div class="item-skills" id="caseFileSkillsChips"></div>
     </div>
   </div>
+</dialog>
+
+<dialog id="socialEmbedDialog" class="social-embed-dialog" aria-label="Social media post">
+  <form method="dialog" class="dialog-close-form">
+    <button class="dialog-close" aria-label="Close">✕</button>
+  </form>
+  <div class="social-embed-body" id="socialEmbedBody"><!-- populated by JS --></div>
 </dialog>
 
 <!-- ============================================================
@@ -1954,6 +2034,11 @@
             <li>Wrote broadcast scripts for <em>NewsWatch Now</em>.</li>
             <li>Transcribed interviews and news broadcasts.</li>
           </ul>
+          <div class="vtl-skills">
+            <span class="item-skill-tag">News Writing</span>
+            <span class="item-skill-tag">Canva</span>
+            <span class="item-skill-tag">Social Media</span>
+          </div>
         </div>
       </article>
 
@@ -1970,6 +2055,29 @@
             <li>Represented the Journalism program in the UST-AB Board of Majors and university-wide meetings and student affairs.</li>
             <li>Reformed the grievance affairs system into a more cohesive system that prioritizes student well-being.</li>
           </ul>
+          <div class="vtl-skills">
+            <span class="item-skill-tag">Leadership</span>
+            <span class="item-skill-tag">Project Management</span>
+            <span class="item-skill-tag">Communication</span>
+            <span class="item-skill-tag">Conflict Resolution</span>
+          </div>
+          <!-- Replace these URLs with the real posts/pages once you
+               have them — Facebook/Instagram chips open the live post
+               in a dialog; a plain article link just opens a new tab. -->
+          <div class="vtl-links">
+            <button type="button" class="link-chip type-facebook" data-embed-type="facebook" data-embed-url="https://www.facebook.com/share/p/REPLACE-WITH-REAL-POST/">
+              <svg viewBox="0 0 20 20"><path d="M12 4h2.2V1.2h-2.4C9.3 1.2 8 2.6 8 5v2H6v3h2v8h3v-8h2.3l.4-3H11V5c0-.6.3-1 1-1z"/></svg>
+              <span>Facebook Recap</span>
+            </button>
+            <button type="button" class="link-chip type-instagram" data-embed-type="instagram" data-embed-url="https://www.instagram.com/p/REPLACE-WITH-REAL-POST/">
+              <svg viewBox="0 0 20 20"><path d="M6 2h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4zm0 1.8A2.2 2.2 0 0 0 3.8 6v8A2.2 2.2 0 0 0 6 16.2h8a2.2 2.2 0 0 0 2.2-2.2V6A2.2 2.2 0 0 0 14 3.8H6zM10 6.3A3.7 3.7 0 1 1 6.3 10 3.7 3.7 0 0 1 10 6.3zm0 1.8A1.9 1.9 0 1 0 11.9 10 1.9 1.9 0 0 0 10 8.1zm4-2.7a.9.9 0 1 1-.9.9.9.9 0 0 1 .9-.9z"/></svg>
+              <span>Instagram Highlight</span>
+            </button>
+            <a class="link-chip" href="https://thetrilby.wixsite.com/the-trilby" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 20 20"><path d="M4 3h9l3 3v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm8 1v3h3l-3-3zM6 10h8v1.4H6V10zm0 3h8v1.4H6V13z"/></svg>
+              <span>Read Article</span>
+            </a>
+          </div>
         </div>
         
       </article>
@@ -1985,6 +2093,11 @@
             <li>Voiced and edited the teaser materials.</li>
             <li>Created video templates and motion graphics for all short-form content.</li>
           </ul>
+          <div class="vtl-skills">
+            <span class="item-skill-tag">Video Editing</span>
+            <span class="item-skill-tag">DaVinci Resolve</span>
+            <span class="item-skill-tag">Adobe Illustrator</span>
+          </div>
         </div>
       </article>
 
@@ -1999,6 +2112,11 @@
             <li>Became an Associate Editor during the first fortnight, assisted the Editor-in-Chief and edited and proofread the articles for publishing.</li>
             <li>Wrote digital news articles for local (Manila City) and national issues.</li>
           </ul>
+          <div class="vtl-skills">
+            <span class="item-skill-tag">News Writing</span>
+            <span class="item-skill-tag">Copyediting</span>
+            <span class="item-skill-tag">Adobe Illustrator</span>
+          </div>
         </div>
       </article>
 
@@ -2015,6 +2133,11 @@
             <li>Overhauled the recruitment and event coordination systems for better efficiency and productivity.</li>
             <li>Rewrote script and slide templates for easier accessibility and coordination.</li>
           </ul>
+          <div class="vtl-skills">
+            <span class="item-skill-tag">Project Management</span>
+            <span class="item-skill-tag">Leadership</span>
+            <span class="item-skill-tag">Teamwork</span>
+          </div>
         </div>
       </article>
 
@@ -2030,6 +2153,11 @@
             <li>Assisted in project coordination and execution.</li>
             <li>Wrote and designed related content.</li>
           </ul>
+          <div class="vtl-skills">
+            <span class="item-skill-tag">Copyediting</span>
+            <span class="item-skill-tag">Empathy</span>
+            <span class="item-skill-tag">Adaptability</span>
+          </div>
         </div>
       </article>
 
@@ -2046,6 +2174,22 @@
             <li>Supervised group chats dedicated to students and created internal and external announcements.</li>
             <li>Created new systems that elevated the Office of the Public Relations Officers’ duties and responsibilities.</li>
           </ul>
+          <div class="vtl-skills">
+            <span class="item-skill-tag">Social Media</span>
+            <span class="item-skill-tag">Canva</span>
+            <span class="item-skill-tag">Communication</span>
+          </div>
+          <!-- Replace with the real campaign posts once you have them. -->
+          <div class="vtl-links">
+            <button type="button" class="link-chip type-facebook" data-embed-type="facebook" data-embed-url="https://www.facebook.com/share/p/REPLACE-WITH-REAL-POST/">
+              <svg viewBox="0 0 20 20"><path d="M12 4h2.2V1.2h-2.4C9.3 1.2 8 2.6 8 5v2H6v3h2v8h3v-8h2.3l.4-3H11V5c0-.6.3-1 1-1z"/></svg>
+              <span>Facebook Page</span>
+            </button>
+            <button type="button" class="link-chip type-instagram" data-embed-type="instagram" data-embed-url="https://www.instagram.com/p/REPLACE-WITH-REAL-POST/">
+              <svg viewBox="0 0 20 20"><path d="M6 2h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4zm0 1.8A2.2 2.2 0 0 0 3.8 6v8A2.2 2.2 0 0 0 6 16.2h8a2.2 2.2 0 0 0 2.2-2.2V6A2.2 2.2 0 0 0 14 3.8H6zM10 6.3A3.7 3.7 0 1 1 6.3 10 3.7 3.7 0 0 1 10 6.3zm0 1.8A1.9 1.9 0 1 0 11.9 10 1.9 1.9 0 0 0 10 8.1zm4-2.7a.9.9 0 1 1-.9.9.9.9 0 0 1 .9-.9z"/></svg>
+              <span>Instagram Campaign</span>
+            </button>
+          </div>
         </div>
       </article>
 
@@ -2058,6 +2202,10 @@
           <ul class="exp-points">
             <li>Pitched, researched and wrote sociopolitical content that was relevant to Pagbago’s advocacies</li>
           </ul>
+          <div class="vtl-skills">
+            <span class="item-skill-tag">News Writing</span>
+            <span class="item-skill-tag">Adaptability</span>
+          </div>
         </div>
       </article>
       
@@ -2351,6 +2499,14 @@
     { id:'babae-sa-septic-tank', genre:'Entertainment', year:'2025',
     title:'‘Ang Babae sa Septic Tank’ set for theatrical launch',
     link:'https://www.newswatchplus.ph/2025/12/03/babae-septic-tank-4-stage-installment/',
+    // `links` is separate from `link` above: `link` is the ONE
+    // "Source" field shown in the meta row; `links` is any number of
+    // EXTRA related posts shown as chip buttons under the dek — here,
+    // the same story as it was also posted to NewsWatch Plus's
+    // Facebook page. Swap the URL for the real post when you have it;
+    // clicking the chip opens it in the social-embed dialog rather
+    // than leaving the site.
+    links: [ { type:'facebook', url:'https://www.facebook.com/share/p/REPLACE-WITH-REAL-POST/' } ],
     pub:'NewsWatch Plus Philippines', dek:'December 3 2025 · NewsWatch Plus intern Kirstien Santos contributed to this report.',
     skills:['News Writing'],
     published:true,
@@ -2496,8 +2652,8 @@
     body: [
       { type: 'image', src: 'assets/ejae.png', caption: 'EJAE, singing voice of HUNTR/X\u2019s Rumi, poses for a photo at the premiere of "KPop Demon Hunters" in Los Angeles, US. (EJAE/Instagram)' },
       { type: 'pullquote', text: 'Metro Manila, Philippines – EJAE, one of the singers in the animated film “KPop Demon Hunters,” will drop a new single on Oct. 24.' },
-      { type: 'p', text: 'EJAE, the singing voice of HUNTR/X’s Rumi, revealed in a letter that she wrote songs that “never found the right home” and thought her upcoming single “In Another World” would be the perfect place to start.“Writing this song helped me through a hard time. I hope that sharing it can help others too,” she said.EJAE is a songwriter who has composed songs for K-pop groups, including Red Velvet’s “Psycho” and aespa’s “Drama.”She also said that she became comfortable being behind the scenes as a songwriter, noting that she did not think she was meant to be an artist.’ ‘5’: ‘contentWidth’: ‘100%’ ’embedCode’: ‘' },
-      { type: 'p', text: 'https://www.instagram.com/p/DPad8h1Dmzo/?utm_source=ig_embed&utm_campaign=loading'},
+      { type: 'p', text: 'EJAE, the singing voice of HUNTR/X’s Rumi, revealed in a letter that she wrote songs that “never found the right home” and thought her upcoming single “In Another World” would be the perfect place to start.“Writing this song helped me through a hard time. I hope that sharing it can help others too,” she said.EJAE is a songwriter who has composed songs for K-pop groups, including Red Velvet’s “Psycho” and aespa’s “Drama.”She also said that she became comfortable being behind the scenes as a songwriter, noting that she did not think she was meant to be an artist.' },
+      { type: 'instagram', url: 'https://www.instagram.com/p/DPad8h1Dmzo/' },
       { type: 'p', text: '“Recently though, I realized I don’t need to box myself into being the traditional view of an artist,” she said on Instagram.The singer also said that writing became a form of therapy and “making sense of the noise in her head.”She also feels humbled and grateful for all that she has received as the voice of the main protagonist of the film, thanking all her supporters. “KPop Demon Hunters” was released last June and has become the most viewed Netflix movie of all time. EJAE, along with other singing voices for the HUNTR/X trio Audrey Nuna and Rei Ami, recently appeared in a Saturday Night Live skit with Bad Bunny. They are also set to debut their first live performance as a group in The Tonight Show with Jimmy Fallon.' }
   ] },
 
@@ -2531,7 +2687,8 @@
     body:[
       { type:'image', src:'assets/mirasol-1.1.png'},
       { type:'pullquote', text:'Metro Manila, Philippines - The weather bureau said 14 areas in Luzon are under Signal No. 1 on Wednesday, Sept. 17 due to Tropical Depression Mirasol.' },
-      { type:'image', src:'assets/mirasol-1.2.png', caption:'https://www.facebook.com/share/p/1Bu2Pfue2t/' },
+      { type:'image', src:'assets/mirasol-1.2.png', caption:'PAGASA\u2019s live press briefing on Facebook.' },
+      { type:'facebook', url:'https://www.facebook.com/share/p/1Bu2Pfue2t/' },
       { type:'p', text:'In its 5 p.m. bulletin, the Philippine Atmospheric, Geophysical and Astronomical Services Administration (PAGASA) said the lowest storm level is up in the following areas:' },
       { type:'p', text:'+Batanes ' },
       { type:'p', text:'+Cagayan including Babuyan Islands' },
@@ -2777,6 +2934,99 @@
   //   { type:'pullquote', text:'...' }
   // Unknown/malformed blocks are just skipped rather than breaking the
   // whole render, so one typo in one article can't blank the dialog.
+  /* ---------------------------------------------------------
+     LINK CHIPS + SOCIAL EMBEDS — shared between the case-file dialog
+     (a work's source article / related Facebook post) and each
+     Experience vtl-card ("proof of work" links). A chip is either:
+       { type:'article', url, label }   → plain <a>, opens in a new tab
+       { type:'facebook', url, label }  → <button>, opens socialEmbedDialog
+       { type:'instagram', url, label } → <button>, opens socialEmbedDialog
+     --------------------------------------------------------- */
+  var CHIP_ICONS = {
+    article: '<svg viewBox="0 0 20 20"><path d="M4 3h9l3 3v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm8 1v3h3l-3-3zM6 10h8v1.4H6V10zm0 3h8v1.4H6V13z"/></svg>',
+    facebook: '<svg viewBox="0 0 20 20"><path d="M12 4h2.2V1.2h-2.4C9.3 1.2 8 2.6 8 5v2H6v3h2v8h3v-8h2.3l.4-3H11V5c0-.6.3-1 1-1z"/></svg>',
+    instagram: '<svg viewBox="0 0 20 20"><path d="M6 2h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4zm0 1.8A2.2 2.2 0 0 0 3.8 6v8A2.2 2.2 0 0 0 6 16.2h8a2.2 2.2 0 0 0 2.2-2.2V6A2.2 2.2 0 0 0 14 3.8H6zM10 6.3A3.7 3.7 0 1 1 6.3 10 3.7 3.7 0 0 1 10 6.3zm0 1.8A1.9 1.9 0 1 0 11.9 10 1.9 1.9 0 0 0 10 8.1zm4-2.7a.9.9 0 1 1-.9.9.9.9 0 0 1 .9-.9z"/></svg>'
+  };
+  var CHIP_LABELS = { article:'Read Article', facebook:'Facebook Post', instagram:'Instagram Post' };
+
+  function linkChipsHtml(links){
+    if(!links || !links.length) return '';
+    return links.map(function(l){
+      if(!l || !l.url) return '';
+      var icon = CHIP_ICONS[l.type] || CHIP_ICONS.article;
+      var label = l.label || CHIP_LABELS[l.type] || 'View Link';
+      if(l.type === 'facebook' || l.type === 'instagram'){
+        return '<button type="button" class="link-chip type-' + l.type + '" data-embed-type="' + l.type + '" data-embed-url="' + l.url + '">' + icon + '<span>' + label + '</span></button>';
+      }
+      return '<a class="link-chip" href="' + l.url + '" target="_blank" rel="noopener noreferrer">' + icon + '<span>' + label + '</span></a>';
+    }).join('');
+  }
+
+  // Facebook's and Instagram's embed SDKs both work the same way: drop
+  // in their expected markup, load their script once, then ask it to
+  // scan the page and turn that markup into the actual live post. Both
+  // SDKs are loaded lazily — only the first time a post of that type
+  // actually needs rendering — since most visitors may never open one.
+  var socialSdkState = { facebook: 'unloaded', instagram: 'unloaded' };
+  function loadSocialSdk(type, onReady){
+    if(type === 'facebook'){
+      if(!document.getElementById('fb-root')){
+        var root = document.createElement('div');
+        root.id = 'fb-root';
+        document.body.appendChild(root);
+      }
+      if(socialSdkState.facebook === 'ready'){ window.FB && window.FB.XFBML.parse(); onReady && onReady(); return; }
+      if(socialSdkState.facebook === 'loading'){ window.setTimeout(function(){ loadSocialSdk(type, onReady); }, 300); return; }
+      socialSdkState.facebook = 'loading';
+      var fbScript = document.createElement('script');
+      fbScript.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0';
+      fbScript.async = true; fbScript.defer = true; fbScript.crossOrigin = 'anonymous';
+      fbScript.onload = function(){ socialSdkState.facebook = 'ready'; onReady && onReady(); };
+      document.body.appendChild(fbScript);
+    } else if(type === 'instagram'){
+      if(socialSdkState.instagram === 'ready'){ window.instgrm && window.instgrm.Embeds.process(); onReady && onReady(); return; }
+      if(socialSdkState.instagram === 'loading'){ window.setTimeout(function(){ loadSocialSdk(type, onReady); }, 300); return; }
+      socialSdkState.instagram = 'loading';
+      var igScript = document.createElement('script');
+      igScript.src = 'https://www.instagram.com/embed.js';
+      igScript.async = true;
+      igScript.onload = function(){ socialSdkState.instagram = 'ready'; onReady && onReady(); };
+      document.body.appendChild(igScript);
+    }
+  }
+
+  function socialEmbedMarkup(type, url){
+    if(type === 'facebook'){
+      return '<div class="fb-post" data-href="' + url + '" data-width="500"></div>' +
+        '<div class="cf-embed-placeholder">Facebook post — loads once this page is live on the internet with a real Facebook URL.</div>';
+    }
+    if(type === 'instagram'){
+      return '<blockquote class="instagram-media" data-instgrm-permalink="' + url + '" data-instgrm-version="14" style="margin:0 auto;"></blockquote>' +
+        '<div class="cf-embed-placeholder">Instagram post — loads once this page is live on the internet with a real Instagram URL.</div>';
+    }
+    return '';
+  }
+
+  var socialEmbedDialog = document.getElementById('socialEmbedDialog');
+  var socialEmbedBody = document.getElementById('socialEmbedBody');
+  function openSocialEmbed(type, url){
+    socialEmbedBody.innerHTML = socialEmbedMarkup(type, url);
+    openDialogAnimated(socialEmbedDialog);
+    loadSocialSdk(type);
+  }
+  wireDialogClose(socialEmbedDialog);
+
+  // One delegated listener covers every social link-chip on the page —
+  // the static ones hand-written into each vtl-card, and any the
+  // case-file dialog re-renders on the fly — so nothing needs re-wiring
+  // after a dynamic render.
+  document.addEventListener('click', function(e){
+    var chip = e.target.closest ? e.target.closest('[data-embed-type]') : null;
+    if(!chip) return;
+    e.preventDefault();
+    openSocialEmbed(chip.getAttribute('data-embed-type'), chip.getAttribute('data-embed-url'));
+  });
+
   function caseFileBlockHtml(block){
     if(!block || !block.type) return '';
     if(block.type === 'p' && block.text){
@@ -2795,6 +3045,18 @@
     }
     if(block.type === 'pullquote' && block.text){
       return '<blockquote class="cf-pullquote">' + block.text + '</blockquote>';
+    }
+    // An inline text link within the article body — e.g. "related
+    // coverage on our Facebook page" — as opposed to a full embedded
+    // post. Renders as one of the same link-chips used everywhere else.
+    if(block.type === 'link' && block.url){
+      return '<div class="cf-embed" style="margin:20px 0;"><div class="link-chip-row">' + linkChipsHtml([block]) + '</div></div>';
+    }
+    // A full embedded Facebook or Instagram post, inline in the
+    // article's own flow — see socialEmbedMarkup for the actual markup
+    // each platform's SDK expects.
+    if((block.type === 'facebook' || block.type === 'instagram') && block.url){
+      return '<div class="cf-embed">' + socialEmbedMarkup(block.type, block.url) + '</div>';
     }
     return '';
   }
@@ -2829,12 +3091,22 @@
       cfFieldHtml('Status', statusBadgeHtml(w));
     document.getElementById('caseFileDek').textContent = w.dek;
 
+    // Extra related links (a Facebook post of the same story, a
+    // related article, etc.) beyond the single "Source" field above —
+    // shown as a row of link-chips right under the dek.
+    var caseFileLinksEl = document.getElementById('caseFileLinks');
+    caseFileLinksEl.innerHTML = linkChipsHtml(w.links);
+
     // Full article body — only rendered when this work carries a
     // `body` array; otherwise the dek above is all that shows, exactly
     // as before.
     if(w.body && w.body.length){
       caseFileArticle.innerHTML = w.body.map(caseFileBlockHtml).join('');
       caseFileArticle.hidden = false;
+      // Any Facebook/Instagram post embedded directly in the body
+      // needs that platform's SDK loaded once the markup is in the DOM.
+      if(w.body.some(function(b){ return b.type === 'facebook'; })){ loadSocialSdk('facebook'); }
+      if(w.body.some(function(b){ return b.type === 'instagram'; })){ loadSocialSdk('instagram'); }
     } else {
       caseFileArticle.innerHTML = '';
       caseFileArticle.hidden = true;
