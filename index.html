@@ -1008,7 +1008,7 @@
     margin:0 0 4px;
   }
   .tl-org{
-    font-family:var(--mono); font-size:1.3rem; letter-spacing:.04em;
+    font-family:var(--mono); font-size:1.0rem; letter-spacing:.04em;
     color:var(--ink-soft); text-transform:uppercase; margin-bottom:14px;
   }
   .tl-achv{
@@ -1447,11 +1447,11 @@
     margin-top:18px; padding-top:16px;
     border-top:1px dashed rgba(255,217,218,.16);
   }
-  .vtl-links{
+  /* .vtl-links{
     display:flex; flex-wrap:wrap; gap:10px;
     margin-top:14px;
   }
-  .vtl-links:first-child{ border-top:none; padding-top:0; margin-top:0; }
+  .vtl-links:first-child{ border-top:none; padding-top:0; margin-top:0; } */
 
   /* ------------------------------------------------------------
      SOCIAL EMBEDS — inline, inside an article's own body (see
@@ -1527,7 +1527,10 @@
   .skill-preview-sub{ font-family:var(--mono); font-size:10px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em; }
 
   .filmstrip-dialog{
-    width:min(1000px, 94vw); height:min(620px, 86vh);
+    /* Widened from 1000px so the right page's content area comfortably
+       clears ~500px — Facebook's own natural embed width — without
+       needing the embed to be shrunk at all on desktop. */
+    width:min(1220px, 94vw); height:min(660px, 86vh);
     position:fixed; inset:0; margin:auto;
     background:var(--ink); border:1px solid rgba(255,217,218,.2);
     opacity:0; transform:translateY(18px) scale(.96);
@@ -1560,7 +1563,10 @@
      crossfades to its next content, since it isn't the one turning.
      ============================================================ */
   .scrapbook-spread{
-    position:relative; flex:1; height:100%; max-width:820px; margin:0 auto;
+    /* 1140 = ~564px per page (minus the 12px spine, split two ways)
+       so a page's content area, after its 32px side padding, is
+       ~500px — matching Facebook's natural embed width. */
+    position:relative; flex:1; height:100%; max-width:1140px; margin:0 auto;
     display:flex;
     box-shadow:0 24px 60px rgba(0,0,0,.55);
     transform-style:preserve-3d;
@@ -2147,9 +2153,9 @@
   </div>
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="kicker">Elsewhere Online</span>
+      <span class="kicker">Other Works Online</span>
       <h2 class="head">Social &amp; video</h2>
-      <p class="lede">Posts and clips that live natively on Facebook, Instagram and YouTube — click any card to open it in place.</p>
+      <p class="lede">Other works posted on the interwebs.</p>
     </div>
     <div class="social-post-grid" id="socialPostGrid"><!-- populated by JS --></div>
   </div>
@@ -2257,7 +2263,7 @@
           </div>
           <!-- Replace these URLs with the real posts/pages once you
                have them — Facebook/Instagram chips open the live post
-               in a dialog; a plain article link just opens a new tab. -->
+               in a dialog; a plain article link just opens a new tab. 
           <div class="vtl-links">
             <button type="button" class="link-chip type-facebook" data-embed-type="facebook" data-embed-url="https://www.facebook.com/photo.php?fbid=1326931169442212&set=pb.100063760254351.-2207520000&type=3">
               <svg viewBox="0 0 20 20"><path d="M12 4h2.2V1.2h-2.4C9.3 1.2 8 2.6 8 5v2H6v3h2v8h3v-8h2.3l.4-3H11V5c0-.6.3-1 1-1z"/></svg>
@@ -2271,7 +2277,7 @@
               <svg viewBox="0 0 20 20"><path d="M4 3h9l3 3v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm8 1v3h3l-3-3zM6 10h8v1.4H6V10zm0 3h8v1.4H6V13z"/></svg>
               <span>Read Article</span>
             </a>
-          </div>
+          </div>-->
         </div>
         
       </article>
@@ -2302,6 +2308,7 @@
             <span class="item-skill-tag">DaVinci Resolve</span>
             <span class="item-skill-tag">Adobe Illustrator</span>
           </div>
+          <!--
           <div class="vtl-links">
             <button type="button" class="link-chip type-youtube" data-embed-type="youtube" data-embed-url="https://www.youtube.com/@CuttotheChase-News">
               <svg viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 4h10a4 4 0 0 1 4 4v4a4 4 0 0 1-4 4H5a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4zM8 7v6l6-3-6-3z"/></svg>
@@ -2315,7 +2322,7 @@
               <svg viewBox="0 0 20 20"><path d="M4 3h9l3 3v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm8 1v3h3l-3-3zM6 10h8v1.4H6V10zm0 3h8v1.4H6V13z"/></svg>
               <span>Read Article</span>
             </a>
-          </div>
+          </div>-->
         </div>
       </article>
 
@@ -2440,7 +2447,7 @@
             <span class="item-skill-tag">Teamwork</span>
             <span class="item-skill-tag">Willingness to Learn</span>
           </div>
-          <!-- Replace with the real campaign posts once you have them. -->
+          <!-- Replace with the real campaign posts once you have them. 
           <div class="vtl-links">
             <button type="button" class="link-chip type-facebook" data-embed-type="facebook" data-embed-url="https://www.facebook.com/share/p/REPLACE-WITH-REAL-POST/">
               <svg viewBox="0 0 20 20"><path d="M12 4h2.2V1.2h-2.4C9.3 1.2 8 2.6 8 5v2H6v3h2v8h3v-8h2.3l.4-3H11V5c0-.6.3-1 1-1z"/></svg>
@@ -2450,7 +2457,7 @@
               <svg viewBox="0 0 20 20"><path d="M6 2h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4zm0 1.8A2.2 2.2 0 0 0 3.8 6v8A2.2 2.2 0 0 0 6 16.2h8a2.2 2.2 0 0 0 2.2-2.2V6A2.2 2.2 0 0 0 14 3.8H6zM10 6.3A3.7 3.7 0 1 1 6.3 10 3.7 3.7 0 0 1 10 6.3zm0 1.8A1.9 1.9 0 1 0 11.9 10 1.9 1.9 0 0 0 10 8.1zm4-2.7a.9.9 0 1 1-.9.9.9.9 0 0 1 .9-.9z"/></svg>
               <span>Instagram Campaign</span>
             </button>
-          </div>
+          </div>-->
         </div>
       </article>
 
@@ -3677,11 +3684,26 @@ function caseFileBlockHtml(block){
      show on the card before it's opened — omit it to just show the
      platform badge on its own).
      --------------------------------------------------------- */
-  var socialPosts = [
-    { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid0AEy27Ty5ywqSwUNUwJT53XFcE2CKsYHwB8Jmo3E2sztGMiT4mGUbUxKqMvp9rUEAl?rdid=jHGEqlx3BYuwjXu8#', label:'FILIPINO POP GROUPS WIN BIG AT BRAZILIAN AWARD SHOW', meta:'LOOK: P-Pop groups BINI, BGYO and all-Filipino global pop group HORI7ON bagged awards from Brazilian award show BreakTudo Awards 2025 on Wednesday, Nov. 19.' },
-    { type:'instagram', url:'https://www.instagram.com/p/REPLACE-WITH-REAL-POST/', label:'Behind the scenes', meta:'Instagram Post' },
-    { type:'youtube', url:'https://www.youtube.com/watch?v=REPLACE-WITH-REAL-ID', label:'Broadcast segment', meta:'YouTube Video' }
-  ];
+var socialPosts = [
+  { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid0AEy27Ty5ywqSwUNUwJT53XFcE2CKsYHwB8Jmo3E2sztGMiT4mGUbUxKqMvp9rUEAl?rdid=TSK45NMxBFzISUZg', label:'FILIPINO POP GROUPS WIN BIG AT BRAZILIAN AWARD SHOW', meta:'Facebook Post' },
+  { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid02wt7JSi67JVKUKueGEh4b7vGcfffmtA6wLJhBk2Kq9WQJ7JFvP4LM1GV1G717DawUl?rdid=TR1Lw7CIr1vHn5X1', label:'FILIPINO DESIGNER PART OF MISS UNIVERSE SELECTION COMMITTEE', meta:'Facebook Post' },
+  { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid02rkwxQ1pFNDmtjbaqj8EPNK6kXPjR9yFtz5GsgoRhDFSn7JzD56T3zSsTHAqGPB2Pl?rdid=tANGZrDtL7WaA3sj', label:'ENRILE REMAINS IN ICU', meta:'Facebook Post' },
+  { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid0P1X7UXBjR7f98rJEeqAC7PxapW1tpw3t7NG9wvCrBgPqtD4AHXduGpZ7KRe2QErUl?rdid=yqktytOn3a0W1nPi', label:'WEATHER WATCH: PAGASA says Signal No. 1 is up in 14 areas on Wednesday afternoon, Sept. 17, due to Tropical Depression', meta:'Facebook Post' },
+  { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid037eoNP7mYmkCNcAbHQXyMdJBQyDjNW854pctNVEPZQYfo4nqt5ZMQw7j8HErS7ypvl?rdid=QauL0YLm6DC4k0Oo', label:'LOOK: The Cebu Archdiocesan Commission', meta:'Facebook Post' },
+  { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid02xxMmCzeYdarMAG4LX44D5MGAsa7WkmmAsvpcoSEGGYfHmhvAPGy96SK3VZvPGvedl?rdid=V5ZCuZ9HhXpRH3wP', label:'EXO IS BACK', meta:'Facebook Post' },
+  { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid022AtcWNdmifPdqP7V5ZV6JuKaw7U6GTWwbWQgXeYP4AawZsvJuNHCnscHKt5TgcRvl?rdid=eWYRZ0MKm2bOBaKw', label:'POSSIBLE STORM IN PAR', meta:'Facebook Post' },
+  { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid0ZGpm9GFDxaSG2gjizrHv6zpxgRq6t6qMmDd6prmU3bGusnLPgQFNqYZhKWgC4mPWl?rdid=65dE1CYQAWorN45M', label:'KATHRYN GETS A MADAME TUSSAUDS WAX FIGURE', meta:'Facebook Post' },
+  { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid023ziSSkyPJo7bRiqsLRckZ3BiVgBpXBuCp55XyJU7R4xaPH6qy72Uw28ewWiQX57Fl?rdid=SWgIAGbK2VIKCQlt', label:'KEPT IT ONE HUNDRED ON THE VIBES', meta:'Facebook Post' },
+  { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid0wz7iXqrmxB1WRGPQhE2LZPjYwgsvruGn7jeGVDNHAnk51Kgf4Tzj4NAGg1uUwFLXl?rdid=ulyQKkYUkWvIzGLx', label:'FRENCH FILM FEST WITH FREE SCREENINGS', meta:'Facebook Post' },
+  { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid02Gp7FCKTGifgfHiBbhz3ASYE7RsvMJ2sjwbPM79fdoFtbVdxbW623wr4p9CeZGUiEl?rdid=hHA2XBGKDZVsmaYR', label:'THE BOYS ARE BACK', meta:'Facebook Post' },
+  { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid02r2nxdnVF23v2WHLk9rR5Lhfe8ePicEnbhCjuxQzQzRuCACa2qa75k3Pi1wPkAfsel?rdid=Bqsf6cgnEz9LRyQm', label:'MOTHERING MOVIE OF THE YEAR', meta:'Facebook Post' },
+  { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid0SaFkZQYCfKENsRYfHpDWYUoireJYqfCpaHdLXnDUH2Ptqinws1h6nw4w9Qb1xLNdl?rdid=dyqHCD72oPKCrUyu', label:'LEA SALONGA LIVE IN HONG KONG DISNEYLAND', meta:'Facebook Post' },
+  { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid02cTpp9MsHBq7nRuJy56fMFgn6rA8S35o9PUPvMTYK1mkbPU83MW6pJUH9Pw3JWGfHl?rdid=GAyyHQ9f6okFeJRa', label:'INC RALLY CLEAN-UP', meta:'Facebook Post' },
+  { type:'youtube', url:'https://www.youtube.com/watch?v=UqaOip3n9rQ', label:'Coming straight to you…#StraightToTheCHase #newsph', meta:'YouTube Video' },
+  { type:'youtube', url:'https://www.youtube.com/shorts/yqj961kY4hs', label:'Still bringing the current happenings with no detours. ⚡️', meta:'YouTube Video' }
+ 
+];
+
   var socialPostGrid = document.getElementById('socialPostGrid');
   if(socialPostGrid){
     socialPosts.forEach(function(post){
