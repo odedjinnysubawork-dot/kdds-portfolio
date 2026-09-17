@@ -1355,6 +1355,51 @@
   .design-title{ font-family:var(--display); font-weight:500; font-size:1.02rem; color:var(--paper); margin-bottom:4px; }
   .design-type{ font-family:var(--mono); font-size:10px; letter-spacing:.05em; color:var(--ink-soft); text-transform:uppercase; }
 
+  /* ------------------------------------------------------------
+     ELSEWHERE ONLINE — social post cards. Same card anatomy as a
+     design-card (thumb + info strip) but the "thumb" is a platform-
+     coloured badge rather than a preview image, since these are posts
+     that live on someone else's platform, not media that's actually
+     been uploaded here. Clicking a card is handled entirely by the
+     sitewide [data-embed-type] delegated listener — no bespoke JS.
+     ------------------------------------------------------------ */
+  .social-post-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:18px;
+  }
+  .social-post-card{
+    display:flex; flex-direction:column; text-align:left;
+    background:rgba(255,217,218,.03);
+    border:1px solid rgba(255,217,218,.16); border-top:2px solid var(--wine);
+    padding:0; cursor:pointer; overflow:hidden;
+    transition:border-color .25s var(--ease), transform .25s var(--ease);
+  }
+  .social-post-card:hover{ border-color:var(--rose); transform:translateY(-3px); }
+  .social-post-thumb{
+    aspect-ratio:4/3; position:relative; overflow:hidden;
+    background:linear-gradient(150deg, var(--slate), var(--ink) 70%);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .social-post-thumb::after{
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(circle at 25% 25%, rgba(234,99,140,.28), transparent 55%);
+    mix-blend-mode:screen;
+  }
+  .social-post-thumb img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+  .social-post-platform-icon{
+    position:relative; z-index:1;
+    width:46px; height:46px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(27,32,33,.6); color:var(--cream);
+    box-shadow:0 6px 16px rgba(0,0,0,.35);
+  }
+  .social-post-platform-icon svg{ width:20px; height:20px; fill:currentColor; }
+  .social-post-card.type-facebook .social-post-platform-icon{ background:#1877f2; }
+  .social-post-card.type-instagram .social-post-platform-icon{ background:linear-gradient(45deg,#f58529,#dd2a7b,#8134af,#515bd4); }
+  .social-post-card.type-youtube .social-post-platform-icon{ background:#ff0000; }
+  .social-post-info{ padding:16px 18px; }
+  .social-post-label{ font-family:var(--display); font-weight:500; font-size:1rem; color:var(--paper); margin-bottom:4px; line-height:1.3; }
+  .social-post-meta{ font-family:var(--mono); font-size:10px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-soft); }
+
   /* Skill chips on a folder-card or design-card — same small tag
      look, shared between both grids and matched against the Skills
      page's own tag text (see the hover-preview script). */
@@ -1441,7 +1486,10 @@
   }
   .social-embed-dialog[open]{ display:block; }
   .social-embed-dialog.is-open{ opacity:1; transform:translateY(0) scale(1); }
-  .social-embed-body{ display:flex; justify-content:center; overflow-y:auto; max-height:calc(88vh - 56px); }
+  .social-embed-body{
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+    overflow-y:auto; max-height:calc(88vh - 56px);
+  }
   .social-embed-body .cf-embed-placeholder{ margin:40px auto; }
   .youtube-embed-frame{
     position:relative; width:100%; max-width:500px;
@@ -1528,7 +1576,17 @@
     backface-visibility:hidden;
   }
   .scrapbook-page-left{ border-radius:3px 0 0 3px; box-shadow:inset -16px 0 26px -22px rgba(0,0,0,.6); }
-  .scrapbook-page-right{ border-radius:0 3px 3px 0; box-shadow:inset 16px 0 26px -22px rgba(0,0,0,.6); }
+  .scrapbook-page-right{
+    border-radius:0 3px 3px 0; box-shadow:inset 16px 0 26px -22px rgba(0,0,0,.6);
+    /* The right page can carry a live Facebook/Instagram embed on top
+       of the usual title/type/skills text, and those embeds size
+       themselves asynchronously once their SDK parses them — often
+       taller than the fixed-height page has room for. Scrolling the
+       overflow internally (instead of the base .scrapbook-page's
+       overflow:hidden, which just clipped it) keeps the embed fully
+       reachable instead of cut off or spilling past the page's edge. */
+    overflow-y:auto; overflow-x:hidden;
+  }
   .scrapbook-spine{
     width:12px; flex:0 0 auto; z-index:2;
     background:#FFEFEF;
@@ -1574,6 +1632,31 @@
   .scrap-photo:hover .scrap-expand-btn,
   .scrap-expand-btn:focus-visible{ opacity:1; transform:scale(1); }
   .scrap-expand-btn:hover{ background:var(--wine); border-color:var(--wine); }
+
+  /* K.S. watermark — sits on every Design & Visual image/video (see
+     designMediaHtml), both the grid thumbnail and the larger scrapbook
+     view. Same monogram treatment as the hero portrait's own "K.S.",
+     just small and corner-placed rather than centred, so it reads as
+     a mark of authorship without competing with the work itself.
+     Positioned differently in each context since the grid thumbnail's
+     corners are empty but the scrapbook photo already has a frame tag
+     (top-left) and expand button (top-right). */
+  .design-watermark{
+    position:absolute; z-index:2; pointer-events:none; user-select:none;
+    font-family:var(--display); font-weight:600; font-size:.8rem;
+    color:rgba(255,255,255,.55);
+    text-shadow:0 1px 3px rgba(0,0,0,.7);
+    letter-spacing:.02em;
+  }
+  .design-thumb .design-watermark{ top:12px; right:12px; }
+  .scrap-photo .design-watermark{
+    bottom:10px; left:10px;
+    background:rgba(27,32,33,.45); padding:2px 7px; border-radius:2px;
+  }
+  .media-lightbox-body .design-watermark{
+    bottom:18px; right:18px; font-size:1rem;
+    background:rgba(27,32,33,.5); padding:3px 9px; border-radius:2px;
+  }
   .scrap-kicker{ font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--wine); }
   .scrap-title{
     font-family:var(--marker); font-weight:400; font-size:2.2rem; line-height:1.05;
@@ -1582,7 +1665,15 @@
   .scrap-type{ font-family:var(--mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:rgba(27,32,33,.55); margin-bottom:8px; }
   .scrap-pub{ font-family:var(--mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--wine); margin-bottom:14px; }
   .scrap-desc{ font-family:var(--body, inherit); font-size:14px; line-height:1.5; color:rgba(27,32,33,.8); margin:0 0 16px; max-width:46ch; }
-  .scrap-fb-embed{ margin-top:16px; max-width:100%; overflow:hidden; }
+  .scrap-fb-embed{
+    margin-top:16px; max-width:100%; overflow:hidden;
+    /* Reserves roughly the height a Facebook post/video embed
+       actually renders at, so the page doesn't visibly jump/"pop"
+       once the SDK finishes and swaps the placeholder div for its
+       real iframe — the iframe just fills space that was already
+       there instead of pushing everything below it down abruptly. */
+    min-height:280px;
+  }
   .scrap-skills{ display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
   .scrap-skill-tag{
     font-family:var(--mono); font-size:9px; letter-spacing:.04em; text-transform:uppercase;
@@ -1632,6 +1723,11 @@
   }
   .scrapbook-leaf-face{
     position:absolute; inset:0; backface-visibility:hidden; box-sizing:border-box;
+    /* The flying leaf never needs its own scrollbar — it's a snapshot
+       shown mid-flight, not something to interact with — and since it
+       also inherits .scrapbook-page-right's overflow-y:auto by class,
+       this keeps that from ever becoming visible during the flip. */
+    overflow:hidden;
   }
   .scrapbook-leaf-back{
     background:var(--paper);
@@ -1665,7 +1761,7 @@
   .media-lightbox-dialog .dialog-close{
     background:rgba(27,32,33,.75);
   }
-  .media-lightbox-body{ display:flex; max-width:100%; max-height:96vh; }
+  .media-lightbox-body{ display:flex; max-width:100%; max-height:96vh; position:relative; }
   .media-lightbox-body img,
   .media-lightbox-body video{
     display:block; margin:auto;
@@ -1812,6 +1908,7 @@
   <a href="#stories" class="ps-link" data-target="stories">Featured Stories</a>
   <a href="#works" class="ps-link" data-target="works">Previous Works</a>
   <a href="#design" class="ps-link" data-target="design">Design &amp; Visual</a>
+  <a href="#elsewhere" class="ps-link" data-target="elsewhere">Elsewhere Online</a>
 </aside>
 
 <!-- ============================================================
@@ -2029,6 +2126,32 @@
       <p class="lede">Graphic design, layout, and video work alongside the reporting. Click any frame to open the filmstrip.</p>
     </div>
     <div class="design-grid" id="designGrid"><!-- populated by JS --></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ELSEWHERE ONLINE — Facebook/Instagram/YouTube posts that live
+     natively on their own platforms rather than as a written case
+     file. Cards reuse the exact same [data-embed-type]/[data-embed-url]
+     pattern as every other link-chip on the site, so clicking one just
+     opens the shared social-embed dialog — no new click-wiring needed.
+     ============================================================ -->
+<section id="elsewhere" class="tight" data-page="work">
+  <div class="deco-layer" aria-hidden="true">
+    <span class="deco-shape deco-ring" style="color:var(--acc-work); width:64px; height:64px; top:14px; right:4%;"></span>
+    <span class="deco-shape deco-disc" style="color:var(--acc-home); width:40px; height:40px; top:60px; left:6%;"></span>
+    <span class="deco-shape deco-wavy" style="color:var(--acc-design); width:80px; height:14px; top:20px; left:42%;">
+      <svg viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10 Q14 0 26 10 T50 10 T74 10 T98 10" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+    </span>
+    <span class="washi washi-dot" style="color:var(--acc-work); width:52px; height:16px; top:8px; right:22%; transform:rotate(-6deg);"></span>
+  </div>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">Elsewhere Online</span>
+      <h2 class="head">Social &amp; video</h2>
+      <p class="lede">Posts and clips that live natively on Facebook, Instagram and YouTube — click any card to open it in place.</p>
+    </div>
+    <div class="social-post-grid" id="socialPostGrid"><!-- populated by JS --></div>
   </div>
 </section>
 
@@ -3266,7 +3389,19 @@
   var socialEmbedDialog = document.getElementById('socialEmbedDialog');
   var socialEmbedBody = document.getElementById('socialEmbedBody');
   function openSocialEmbed(type, url){
-    socialEmbedBody.innerHTML = socialEmbedMarkup(type, url);
+    // Same "no visible error on failure" problem as the in-article
+    // embeds (see caseFileBlockHtml) — Facebook/Instagram's SDK just
+    // stays blank rather than reporting when a post won't render, so
+    // this dialog needs its own guaranteed fallback link too, not just
+    // the ones embedded inside a case-file article.
+    var fallback = '';
+    if(type === 'facebook' || type === 'instagram'){
+      var platformLabel = type === 'facebook' ? 'Facebook' : 'Instagram';
+      fallback = '<a class="cf-embed-fallback" href="' + url + '" target="_blank" rel="noopener noreferrer">View on ' + platformLabel + ' ↗</a>';
+    } else if(type === 'youtube'){
+      fallback = '<a class="cf-embed-fallback" href="' + url + '" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a>';
+    }
+    socialEmbedBody.innerHTML = socialEmbedMarkup(type, url) + fallback;
     openDialogAnimated(socialEmbedDialog);
     loadSocialSdk(type);
   }
@@ -3486,18 +3621,22 @@ function caseFileBlockHtml(block){
   // media still bubbles up to open the filmstrip) and the scrapbook
   // modal (a real player with controls, since that's a deliberate
   // click and autoplaying sound there would need to be muted anyway).
+  // Every image/video gets the same small "K.S." watermark in the
+  // corner — one shared function means one place to maintain it,
+  // rather than repeating it at each call site.
   function designMediaHtml(d, opts){
     opts = opts || {};
+    var media = '';
     if(d.video){
-      return '<video src="' + d.video + '"' +
+      media = '<video src="' + d.video + '"' +
         (d.poster ? ' poster="' + d.poster + '"' : '') +
         (opts.controls ? ' controls playsinline' : ' autoplay muted loop playsinline') +
         '></video>';
+    } else if(d.img){
+      media = '<img src="' + d.img + '" alt="' + d.title + '" loading="lazy">';
     }
-    if(d.img){
-      return '<img src="' + d.img + '" alt="' + d.title + '" loading="lazy">';
-    }
-    return '';
+    if(!media) return '';
+    return media + '<span class="design-watermark" aria-hidden="true">K.S.</span>';
   }
 
   var designGrid = document.getElementById('designGrid');
@@ -3517,6 +3656,39 @@ function caseFileBlockHtml(block){
     card.addEventListener('click', function(){ openFilmstrip(i); });
     designGrid.appendChild(card);
   });
+
+  /* ---------------------------------------------------------
+     ELSEWHERE ONLINE — posts that live on Facebook/Instagram/YouTube
+     rather than as a case file or design item. Replace the placeholder
+     URLs below with real ones; `img` is optional (a still/poster to
+     show on the card before it's opened — omit it to just show the
+     platform badge on its own).
+     --------------------------------------------------------- */
+  var socialPosts = [
+    { type:'facebook', url:'https://www.facebook.com/share/p/REPLACE-WITH-REAL-POST/', label:'NewsWatch Plus recap', meta:'Facebook Post' },
+    { type:'instagram', url:'https://www.instagram.com/p/REPLACE-WITH-REAL-POST/', label:'Behind the scenes', meta:'Instagram Post' },
+    { type:'youtube', url:'https://www.youtube.com/watch?v=REPLACE-WITH-REAL-ID', label:'Broadcast segment', meta:'YouTube Video' }
+  ];
+  var socialPostGrid = document.getElementById('socialPostGrid');
+  if(socialPostGrid){
+    socialPosts.forEach(function(post){
+      var card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'social-post-card type-' + post.type;
+      card.setAttribute('data-embed-type', post.type);
+      card.setAttribute('data-embed-url', post.url);
+      card.innerHTML =
+        '<div class="social-post-thumb">' +
+          (post.img ? '<img src="' + post.img + '" alt="" loading="lazy">' : '') +
+          '<span class="social-post-platform-icon">' + (CHIP_ICONS[post.type] || '') + '</span>' +
+        '</div>' +
+        '<div class="social-post-info">' +
+          '<div class="social-post-label">' + post.label + '</div>' +
+          '<div class="social-post-meta">' + post.meta + '</div>' +
+        '</div>';
+      socialPostGrid.appendChild(card);
+    });
+  }
 
   /* ---------------------------------------------------------
      SCRAPBOOK PAGE FLIP — only the page that's actually turning gets
@@ -3680,6 +3852,16 @@ function caseFileBlockHtml(block){
 
     var front = turningEl.cloneNode(true);
     front.classList.add('scrapbook-leaf-face');
+    // Live embeds (Facebook/Instagram iframes the SDK already swapped
+    // in) don't survive cloneNode — an iframe's loaded content is lost
+    // on clone, so the leaf would carry a blank, reloading frame for
+    // its whole flight, which is exactly the "glitchy" flash/delay.
+    // The leaf only exists for the flip's duration and is discarded
+    // right after, so it's simplest to just drop any embed from the
+    // snapshot rather than let a broken one flicker into view.
+    var frontEmbeds = front.querySelectorAll('.scrap-fb-embed, .fb-post, .fb-video, .instagram-media, iframe');
+    frontEmbeds.forEach(function(el){ el.remove(); });
+    front.scrollTop = 0;
     var back = document.createElement('div');
     back.className = 'scrapbook-leaf-face scrapbook-leaf-back';
     back.style.transform = stacked ? 'rotateX(180deg)' : 'rotateY(180deg)';
