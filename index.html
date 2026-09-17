@@ -2112,7 +2112,7 @@
     </span>
     <span class="washi washi-stripe" style="color:var(--acc-home); width:52px; height:16px; top:22px; right:22%; transform:rotate(5deg);"></span>
   </div>
-<div class="news-clipping" style="top:25%; left:-1%; transform:rotate(-8deg);">
+<div class="news-clipping" style="top:5%; right:5%; transform:rotate(25deg);">
       <div class="nc-photo"></div>
       <div class="nc-headline">Housing Beat Wins State Press Award</div>
       <div class="nc-line"></div>
@@ -2283,7 +2283,7 @@
           <h3 class="exp-role">Video and Creative Direction, Voice Actor</h3>
           <div class="exp-org">Cut To The CHase — UST, Manila</div>
           <ul class="exp-points">
-            <li>Led the creative direction of the page from its branding to its publication materials.</li>
+            <li>Led the creative direction of the page from its branding to its publicitymaterials.</li>
             <li>Voiced and edited the teaser materials.</li>
             <li>Created video templates and motion graphics for all short-form content.</li>
           </ul>
@@ -2419,7 +2419,7 @@
           <h3 class="exp-role">Public Relations Officer</h3>
           <div class="exp-org">UST Journalism Society — UST, Manila</div>
           <ul class="exp-points">
-            <li>Led the creative direction of the organization, from its publication materials to its branding.</li>
+            <li>Led the creative direction of the organization, from its publicity materials to its branding.</li>
             <li>Managed the organization’s social media accounts: Facebook, Instagram, X and drove higher engagement towards posts.</li>
             <li>Designed merch items such as lanyards, t-shirts and stickers.</li>
             <li>Supervised group chats dedicated to students and created internal and external announcements.</li>
@@ -3665,7 +3665,7 @@ function caseFileBlockHtml(block){
      platform badge on its own).
      --------------------------------------------------------- */
   var socialPosts = [
-    { type:'facebook', url:'https://www.facebook.com/share/p/REPLACE-WITH-REAL-POST/', label:'NewsWatch Plus recap', meta:'Facebook Post' },
+    { type:'facebook', url:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid0AEy27Ty5ywqSwUNUwJT53XFcE2CKsYHwB8Jmo3E2sztGMiT4mGUbUxKqMvp9rUEAl?rdid=jHGEqlx3BYuwjXu8#', label:'FILIPINO POP GROUPS WIN BIG AT BRAZILIAN AWARD SHOW', meta:'LOOK: P-Pop groups BINI, BGYO and all-Filipino global pop group HORI7ON bagged awards from Brazilian award show BreakTudo Awards 2025 on Wednesday, Nov. 19.' },
     { type:'instagram', url:'https://www.instagram.com/p/REPLACE-WITH-REAL-POST/', label:'Behind the scenes', meta:'Instagram Post' },
     { type:'youtube', url:'https://www.youtube.com/watch?v=REPLACE-WITH-REAL-ID', label:'Broadcast segment', meta:'YouTube Video' }
   ];
@@ -3812,7 +3812,26 @@ function caseFileBlockHtml(block){
     // on screen, and wait a frame so the new spread has painted first.
     var d = designData[index];
     if(d && d.fb){
-      requestAnimationFrame(function(){ loadSocialSdk('facebook'); });
+      requestAnimationFrame(function(){
+        // Facebook's embed SDK doesn't render responsively — it bakes
+        // its iframe's *content* server-side for whatever pixel width
+        // is in data-width at parse time, so a CSS max-width after the
+        // fact only squashes the outer box while the content inside
+        // stays sized for the old width, which Facebook's own resize
+        // script then detects as a mismatch and collapses to nothing.
+        // Measuring the actual container here and writing that back
+        // into data-width *before* parsing avoids that entirely.
+        var embedEl = scrapbookSpread.querySelector('.scrap-fb-embed [data-href]');
+        if(embedEl){
+          var containerWidth = Math.round(embedEl.parentElement.clientWidth);
+          if(containerWidth > 0){
+            // Facebook ignores data-width below ~180 and it's not
+            // useful much past the 500 the markup already asks for.
+            embedEl.setAttribute('data-width', Math.max(180, Math.min(500, containerWidth)));
+          }
+        }
+        loadSocialSdk('facebook');
+      });
     }
   }
 
