@@ -1008,11 +1008,11 @@
     margin:0 0 4px;
   }
   .tl-org{
-    font-family:var(--mono); font-size:1.4rem; letter-spacing:.04em;
+    font-family:var(--mono); font-size:1.6rem; letter-spacing:.04em;
     color:var(--ink-soft); text-transform:uppercase; margin-bottom:14px;
   }
   .tl-achv{
-    font-family:var(--mono); font-size:0.7rem; letter-spacing:.04em;
+    font-family:var(--mono); font-size:1.0rem; letter-spacing:.04em;
     color:var(--ink-soft); text-transform:uppercase; margin-bottom:14px;
   }
   .tl-points{ margin:0; padding-left:18px; color:var(--ink-soft); font-size:.95rem; line-height:1.7; }
@@ -1579,7 +1579,10 @@
     font-family:var(--marker); font-weight:400; font-size:2.2rem; line-height:1.05;
     color:var(--ink); margin:12px 0 6px;
   }
-  .scrap-type{ font-family:var(--mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:rgba(27,32,33,.55); margin-bottom:20px; }
+  .scrap-type{ font-family:var(--mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:rgba(27,32,33,.55); margin-bottom:8px; }
+  .scrap-pub{ font-family:var(--mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--wine); margin-bottom:14px; }
+  .scrap-desc{ font-family:var(--body, inherit); font-size:14px; line-height:1.5; color:rgba(27,32,33,.8); margin:0 0 16px; max-width:46ch; }
+  .scrap-fb-embed{ margin-top:16px; max-width:100%; overflow:hidden; }
   .scrap-skills{ display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
   .scrap-skill-tag{
     font-family:var(--mono); font-size:9px; letter-spacing:.04em; text-transform:uppercase;
@@ -1602,7 +1605,10 @@
   .scrapbook-page .scrap-kicker,
   .scrapbook-page .scrap-title,
   .scrapbook-page .scrap-type,
-  .scrapbook-page .scrap-skills{ position:relative; z-index:1; }
+  .scrapbook-page .scrap-pub,
+  .scrapbook-page .scrap-desc,
+  .scrapbook-page .scrap-skills,
+  .scrapbook-page .scrap-fb-embed{ position:relative; z-index:1; }
   .scrapbook-page .scrap-page-num{ z-index:2; }
   .scrapbook-page .deco-ring{ opacity:.3; }
   .scrapbook-page .deco-disc{ opacity:.12; }
@@ -2082,9 +2088,20 @@
             <li>Transcribed interviews and news broadcasts.</li>
           </ul>
           <div class="vtl-skills">
-            <span class="item-skill-tag">News Writing</span>
+            <span class="item-skill-tag">Newswriting</span>
             <span class="item-skill-tag">Canva</span>
             <span class="item-skill-tag">Social Media</span>
+            <span class="item-skill-tag">Copyediting</span>
+            <span class="item-skill-tag">Copywriting</span>
+            <span class="item-skill-tag">Empathy</span>
+            <span class="item-skill-tag">Adaptability</span>
+            <span class="item-skill-tag">Communication</span>
+            <span class="item-skill-tag">Teamwork</span>
+            <span class="item-skill-tag">Google Workspace</span>
+            <span class="item-skill-tag">Flexible</span>
+            <span class="item-skill-tag">Open-mindedness</span>
+            <span class="item-skill-tag">Scriptwriting</span>
+            
           </div>
         </div>
       </article>
@@ -2103,10 +2120,17 @@
             <li>Reformed the grievance affairs system into a more cohesive system that prioritizes student well-being.</li>
           </ul>
           <div class="vtl-skills">
+            <span class="item-skill-tag">Copyediting</span>
+            <span class="item-skill-tag">Copywriting</span>
             <span class="item-skill-tag">Leadership</span>
             <span class="item-skill-tag">Project Management</span>
+            <span class="item-skill-tag">Empathy</span>
             <span class="item-skill-tag">Communication</span>
             <span class="item-skill-tag">Conflict Resolution</span>
+            <span class="item-skill-tag">Adobe Lightroom</span>
+            <span class="item-skill-tag">Detail-oriented</span>
+            <span class="item-skill-tag">Flexible</span>
+            <span class="item-skill-tag">Open-mindedness</span>
           </div>
           <!-- Replace these URLs with the real posts/pages once you
                have them — Facebook/Instagram chips open the live post
@@ -2142,6 +2166,16 @@
           </ul>
           <div class="vtl-skills">
             <span class="item-skill-tag">Video Editing</span>
+            <span class="item-skill-tag">Graphic Design</span>
+            <span class="item-skill-tag">Affinity</span>
+            <span class="item-skill-tag">Canva</span>
+            <span class="item-skill-tag">Copyediting</span>
+            <span class="item-skill-tag">Adaptability</span>
+            <span class="item-skill-tag">Communication</span>
+            <span class="item-skill-tag">Social Media Management</span>
+            <span class="item-skill-tag">Google Workspace</span>
+            <span class="item-skill-tag">Teamwork</span>
+            <span class="item-skill-tag">Motion Graphics</span>
             <span class="item-skill-tag">DaVinci Resolve</span>
             <span class="item-skill-tag">Adobe Illustrator</span>
           </div>
@@ -2175,8 +2209,19 @@
           </ul>
           <div class="vtl-skills">
             <span class="item-skill-tag">News Writing</span>
+            <span class="item-skill-tag">Graphic Design</span>
+            <span class="item-skill-tag">Copywriting</span>
+            <span class="item-skill-tag">Canva</span>
             <span class="item-skill-tag">Copyediting</span>
+            <span class="item-skill-tag">Video Editing</span>
             <span class="item-skill-tag">Adobe Illustrator</span>
+            <span class="item-skill-tag">MS Office</span>
+            <span class="item-skill-tag">Communication</span>
+            <span class="item-skill-tag">Adaptability</span>
+            <span class="item-skill-tag">Teamwork</span>
+            <span class="item-skill-tag">Conflict Resolution</span>
+            <span class="item-skill-tag">Adobe Lightroom</span>
+            <span class="item-skill-tag">Social Media</span>
           </div>
         </div>
       </article>
@@ -2197,7 +2242,18 @@
           <div class="vtl-skills">
             <span class="item-skill-tag">Project Management</span>
             <span class="item-skill-tag">Leadership</span>
+            <span class="item-skill-tag">Empathy</span>
+            <span class="item-skill-tag">Copywriting</span>
+            <span class="item-skill-tag">Canva</span>
+            <span class="item-skill-tag">Scriptwriting</span>
+            <span class="item-skill-tag">Copyediting</span>
+            <span class="item-skill-tag">Google Workspace</span>
+            <span class="item-skill-tag">Communication</span>
+            <span class="item-skill-tag">Adaptability</span>
             <span class="item-skill-tag">Teamwork</span>
+            <span class="item-skill-tag">Conflict Resolution</span>
+            <span class="item-skill-tag">Open-Mindedness</span>
+            <span class="item-skill-tag">Detail-Oriented</span>
           </div>
         </div>
       </article>
@@ -2215,9 +2271,20 @@
             <li>Wrote and designed related content.</li>
           </ul>
           <div class="vtl-skills">
-            <span class="item-skill-tag">Copyediting</span>
+            <span class="item-skill-tag">Project Management</span>
+            <span class="item-skill-tag">Leadership</span>
             <span class="item-skill-tag">Empathy</span>
+            <span class="item-skill-tag">Copywriting</span>
+            <span class="item-skill-tag">Canva</span>
+            <span class="item-skill-tag">Scriptwriting</span>
+            <span class="item-skill-tag">Copyediting</span>
+            <span class="item-skill-tag">Google Workspace</span>
+            <span class="item-skill-tag">Communication</span>
             <span class="item-skill-tag">Adaptability</span>
+            <span class="item-skill-tag">Teamwork</span>
+            <span class="item-skill-tag">Conflict Resolution</span>
+            <span class="item-skill-tag">Open-Mindedness</span>
+            <span class="item-skill-tag">Detail-Oriented</span>
           </div>
         </div>
       </article>
@@ -2236,9 +2303,19 @@
             <li>Created new systems that elevated the Office of the Public Relations Officers’ duties and responsibilities.</li>
           </ul>
           <div class="vtl-skills">
-            <span class="item-skill-tag">Social Media</span>
+            <span class="item-skill-tag">Graphic Design</span>
+            <span class="item-skill-tag">Photo Editing</span>
+            <span class="item-skill-tag">Detail-Oriented</span>
+            <span class="item-skill-tag">Project Management</span>
+            <span class="item-skill-tag">Adaptability</span>
+            <span class="item-skill-tag">Flexible</span>
             <span class="item-skill-tag">Canva</span>
+            <span class="item-skill-tag">Adobe Lightroom</span>
+            <span class="item-skill-tag">Google Workspace</span>
+            <span class="item-skill-tag">Leadership</span>
             <span class="item-skill-tag">Communication</span>
+            <span class="item-skill-tag">Teamwork</span>
+            <span class="item-skill-tag">Willingness to Learn</span>
           </div>
           <!-- Replace with the real campaign posts once you have them. -->
           <div class="vtl-links">
@@ -2264,8 +2341,13 @@
             <li>Pitched, researched and wrote sociopolitical content that was relevant to Pagbago’s advocacies</li>
           </ul>
           <div class="vtl-skills">
-            <span class="item-skill-tag">News Writing</span>
+            <span class="item-skill-tag">Copywriting</span>
+            <span class="item-skill-tag">Copyediting</span>
+            <span class="item-skill-tag">Willingness to Learn</span>
+            <span class="item-skill-tag">Teamwork</span>
             <span class="item-skill-tag">Adaptability</span>
+            <span class="item-skill-tag">Communication</span>
+            <span class="item-skill-tag">Open-Mindedness</span>
           </div>
         </div>
       </article>
@@ -2360,6 +2442,7 @@
         <span class="kicker">Technical</span>
         <div class="skill-tags">
           <span class="skill-tag">News Writing</span>
+          <span class="skill-tag">Graphic Design</span>
           <span class="skill-tag">Copyediting</span>
           <span class="skill-tag">Copywriting</span>
           <span class="skill-tag">Video Editing</span>
@@ -3358,19 +3441,33 @@ function caseFileBlockHtml(block){
      CREATIVE DESIGN GALLERY — grid + filmstrip lightbox
      --------------------------------------------------------- */
   var designData = [
-    { title:'Miss Universe 2025', type:'Editorial Design \u00b7 2025', skills:['Graphic Design'], img:'assets/missuniv.png' },
-    { title:'[THE TRILBY] INTRO-Trilby Asks (Horizontal)', type:'Motion / Video \u00b7 2023', skills:['Graphic Design'], video:'assets/[THE TRILBY] INTRO-Trilby Asks (Horizontal).mp4' },
-    { title:'[THE TRILBY] INTRO-Trilby Asks (Vertical)', type:'Motion / Video \u00b7 2022', skills:['Adobe Premiere'], video:'assets/[THE TRILBY] INTRO-Trilby Asks (Vertical).mp4' },
-    { title:'Trillby', type:'Logo \u00b7 2025', skills:['Layout & Typography','Graphic Design'], img:'assets/Trilby t logo.png' },
-    { title:'LTR-PRICE-HIKE-PUBMAT THE TRILBY', type:'Infographics \u00b7 2024', skills:['Graphic Design'], img:'assets/LTR-PRICE-HIKE-PUBMAT_THE TRILBY.png' },
-    { title:'shirt-design', type:'Merchandise Design \u00b7 2024', skills:['Graphic Design'], img:'assets/shirt-design.png' },
-    { title:'beep-1', type:'Infographics \u00b7 2024', skills:['Graphic Design'], img:'assets/beep-1.png' },
-    { title:'beep-2', type:'Infographics \u00b7 2024', skills:['Graphic Design'], img:'assets/beep-2.png' },
-    { title:'lanyard', type:'Infographics \u00b7 2024', skills:['Graphic Design'], img:'assets/lanyard.png' },
+    { title:'3RD-RUNNER UP, MISS UNIVERSE 2025', type:'Publicity Material/Graphics \u00b7 2025', skills:['Graphic Design', 'Canva', 'Affinity'], img:'assets/missuniv.png',
+      pub:'NewsWatch Plus Philippines',
+      desc:'Created a series of templates for Ahtisa Manalo\u2019s run as Miss Universe Philippines',
+      fb:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid025JWTrMKNxHpUxG7RtRDpfSWP68PgKVozj6ap6TFWyHvXrAEDWRnuq2mWVbtP1SDSl?rdid=l9IWaiZEorKW91Jz#' },
+    { title:'#TRILBYASKS INTRO (HORIZONTAL)', type:'Video/Motion Graphics \u00b7 2023', skills:['Video Editing','Motion Graphics','Canva','DaVinci Resolve'], video:'assets/[THE TRILBY] INTRO-Trilby Asks (Horizontal).mp4',
+      desc:'Created a 7-second intro for The Trilby\u2019s vox populi segment' },
+    { title:'#TRILBYASKS INTRO (VERTICAL)', type:'Video/Motion Graphics \u00b7 2022', skills:['Video Editing','Motion Graphics','Canva','DaVinci Resolve'], video:'assets/[THE TRILBY] INTRO-Trilby Asks (Vertical).mp4',
+      desc:'Created a 7-second intro for The Trilby\u2019s vox populi segment' },
+    { title:'THE TRILBY LOGO', type:'Graphics \u00b7 2025', skills:['Graphic Design','Adobe Illustrator','Canva'], img:'assets/Trilby t logo.png',
+      desc:'Created the logo branding for The Trilby' },
+    { title:'THE TRILBY - LRT-1 FARE HIKE', type:'Graphics \u00b7 2024', skills:['Graphic Design','Canva'], img:'assets/LTR-PRICE-HIKE-PUBMAT_THE TRILBY.png',
+      desc:'Created LRT-1 fare hike publicity materials for The Trilby' },
+    { title:'UST JRNSOC T-SHIRT MERCH DESIGN (BACK)', type:'Graphics \u00b7 2024', skills:['Graphic Design','Canva'], img:'assets/shirt-design.png',
+      desc:'Co-designed and illustrated with Nadine T. Felismino. Created the layout, typography and scribbles for the UST Journalism Society\u2019s merch, specifically the t-shirt' },
+    { title:'UST JRNSOC BEEP CARD STICKER (1)', type:'Graphics \u00b7 2024', skills:['Graphic Design','Canva'], img:'assets/beep-1.png',
+      desc:'Created Beep card designs for the UST Journalism Society\u2019s giveaways' },
+    { title:'UST JRNSOC BEEP CARD STICKER (2)', type:'Graphics \u00b7 2024', skills:['Graphic Design','Canva'], img:'assets/beep-2.png',
+      desc:'Created Beep card designs for the UST Journalism Society\u2019s giveaways' },
+    { title:'UST JRNSOC LANYARD (2023)', type:'Graphics \u00b7 2024', skills:['Graphic Design','Canva'], img:'assets/lanyard_2.png',
+      desc:'Created designs for the UST Journalism Society\u2019s Lanyard for A.Y. 2023 - 2024' },
+    /* TODO: point this at the actual 2025 lanyard image/video file once it's in /assets — reusing the 2023 art for now as a placeholder. */
+    { title:'UST JRNSOC LANYARD (2025)', type:'Graphics \u00b7 2025', skills:['Graphic Design','Canva'], img:'assets/lanyard.png',
+      desc:'Created designs for the UST Journalism Society\u2019s Lanyard for A.Y. 2025 - 2026' },
     { title:'e-sports-2024', type:'Infographics \u00b7 2024', skills:['Graphic Design'], img:'assets/e-sports-2024.png' },
     { title:'coverage-2024', type:'Infographics \u00b7 2024', skills:['Graphic Design'], img:'assets/coverage-2024.png' },
     { title:'bacc-banner-2024', type:'Infographics \u00b7 2024', skills:['Graphic Design'], img:'assets/bacc-banner-2024.png' },
-    { title:'intro-2023', type:'Infographics \u00b7 2024', skills:['Graphic Design'], video:'assets/intro-2023.mp4' },
+    { title:'intro-2023', type:'Infographics \u00b7 2023', skills:['Graphic Design'], video:'assets/intro-2023.mp4' },
     { title:'cttc-clock', type:'Infographics \u00b7 2024', skills:['Graphic Design'], video:'assets/cttc-clock.mp4' },
   ];
 
@@ -3509,7 +3606,10 @@ function caseFileBlockHtml(block){
         '<span class="scrap-kicker">Design &amp; Visual</span>' +
         '<h3 class="scrap-title">' + d.title + '</h3>' +
         '<div class="scrap-type">' + d.type + '</div>' +
+        (d.pub ? '<div class="scrap-pub">Published in ' + d.pub + '</div>' : '') +
+        (d.desc ? '<p class="scrap-desc">' + d.desc + '</p>' : '') +
         scrapSkillChipsHtml(d.skills) +
+        (d.fb ? '<div class="scrap-fb-embed">' + socialEmbedMarkup('facebook', d.fb) + '</div>' : '') +
         '<span class="scrap-page-num">' + (index + 1) + ' / ' + designData.length + '</span>' +
       '</div>'
     );
@@ -3535,6 +3635,13 @@ function caseFileBlockHtml(block){
 
   function renderScrapbookSpread(index){
     scrapbookSpread.innerHTML = scrapbookSpreadHtml(index);
+    // Same lazy-load-then-parse pattern as the case-file dialog: only
+    // pull in the Facebook SDK when a frame that actually needs it is
+    // on screen, and wait a frame so the new spread has painted first.
+    var d = designData[index];
+    if(d && d.fb){
+      requestAnimationFrame(function(){ loadSocialSdk('facebook'); });
+    }
   }
 
   function flipScrapbook(newIndex, direction){
