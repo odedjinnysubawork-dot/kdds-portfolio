@@ -1249,7 +1249,7 @@
     text-transform:uppercase; color:var(--rose);
   }
   .cf-value{ font-family:var(--mono); font-size:12.5px; letter-spacing:.02em; color:var(--paper); }
-  .case-file-dek{ color:var(--ink-soft); line-height:1.75; font-size:.98rem; }
+  .case-file-dek{ color:var(--ink-soft); line-height:1.5; font-size:.98rem; }
   .case-file-skills{ margin-top:26px; }
   .case-file-skills-label{
     font-family:var(--mono); font-size:10px; letter-spacing:.1em;
@@ -1263,7 +1263,7 @@
      `dek` teaser as before; this only renders when one is present.
      ------------------------------------------------------------ */
   .case-file-article{
-    margin-top:28px; padding-top:26px;
+    margin-top:0px; padding-top:0px;
     border-top:1px dashed rgba(255,217,218,.2);
   }
   .cf-p{
@@ -1761,26 +1761,54 @@
 
   /* Fullscreen media viewer — a plain "as large as it can be, keep
      its own aspect ratio" preview. Background is transparent since
-     the shared dialog::backdrop already dims the page behind it. */
+     the shared dialog::backdrop already dims the page behind it.
+     The dialog itself fills the viewport (rather than shrink-wrapping
+     to a fixed 1400px box with an auto-margin centering hack) and
+     .media-lightbox-body does the centering with plain flexbox —
+     that's the version of this pattern every engine agrees on, so
+     there's no auto-margin/fit-content recentering step for a
+     browser to get wrong or delay after the video's real (often
+     portrait) size becomes known. */
   .media-lightbox-dialog{
-    width:min(1400px, 96vw); max-height:96vh;
-    position:fixed; inset:0; margin:auto; height:fit-content;
+    position:fixed; inset:0; margin:0;
+    width:100vw; height:100vh; max-width:none; max-height:none;
     background:transparent; border:none; box-shadow:none;
-    opacity:0; transform:scale(.96);
-    transition:opacity .3s var(--ease), transform .3s var(--ease);
+    opacity:0; transition:opacity .3s var(--ease);
   }
   .media-lightbox-dialog[open]{ display:flex; align-items:center; justify-content:center; }
-  .media-lightbox-dialog.is-open{ opacity:1; transform:scale(1); }
+  .media-lightbox-dialog.is-open{ opacity:1; }
   .media-lightbox-dialog .dialog-close{
     background:rgba(27,32,33,.75);
   }
-  .media-lightbox-body{ display:flex; max-width:100%; max-height:96vh; position:relative; }
+  .media-lightbox-body{
+    display:flex; align-items:center; justify-content:center;
+    width:100%; height:100%; box-sizing:border-box;
+    padding:2vh 2vw; position:relative;
+  }
   .media-lightbox-body img,
   .media-lightbox-body video{
-    display:block; margin:auto;
-    max-width:100%; max-height:96vh; width:auto; height:auto;
+    display:block; margin:auto; flex:0 1 auto;
+    max-width:100%; max-height:100%; width:auto; height:auto;
     object-fit:contain;
     box-shadow:0 24px 70px rgba(0,0,0,.6);
+  }
+
+  /* Native browser fullscreen — reached via a <video>'s own
+     control-strip fullscreen icon, or a right-click "Enter Full
+     Screen", both of which bypass the lightbox above entirely and
+     act on the <video> element wherever it lives. Without this, a
+     vertical clip still carries whatever object-fit it had in its
+     original spot (object-fit:cover on .design-thumb/.scrap-photo/
+     .story-media previews), so it gets center-cropped to fill a
+     horizontal frame instead of showing whole. This forces every
+     video, in any container, to show its full frame letterboxed
+     the moment it goes fullscreen. */
+  video:fullscreen,
+  video:-webkit-full-screen,
+  video:-moz-full-screen{
+    object-fit:contain !important;
+    width:100% !important; height:100% !important;
+    background:#000;
   }
 
   /* ============================================================
@@ -1978,9 +2006,10 @@
      ============================================================ -->
 <section id="stories" class="pan-section" data-page="work">
   <div class="pan-sticky">
-    <div class="wrap" style="position:absolute; top:64px; left:50%; transform:translateX(-50%); width:var(--wrap);">
+    <div class="wrap" style="position:absolute; top:40px; left:50%; transform:translateX(-50%); width:var(--wrap);">
       <span class="kicker reveal in-view">Selected Work</span>
       <h2 class="head reveal in-view">Featured stories</h2>
+      <p class="lede">The best of (maybe) the best yeah?</p>
     </div>
     <span class="pan-hint">Keep scrolling →</span>
 
@@ -2157,7 +2186,7 @@
     <div class="section-head reveal">
       <span class="kicker">Creative Work</span>
       <h2 class="head">Design &amp; visual work</h2>
-      <p class="lede">Graphic design, layout, and video work alongside the reporting. Click any frame to open the filmstrip.</p>
+      <p class="lede">Best of the sparks of creativity contained in the visual medium.</p>
     </div>
     <div class="design-grid" id="designGrid"><!-- populated by JS --></div>
   </div>
@@ -2265,7 +2294,7 @@
 
       <article class="vtl-item vtl-right reveal">
 	<span class="vtl-dot" aria-hidden="true"></span>
-        <div class="vtl-date-slot"><span class="exp-year">Jun 2025 — Jun 2026</span></div>
+        <div class="vtl-date-slot"><span class="exp-year">June 2025 — June 2026</span></div>
         <div class="vtl-card">
           <h3 class="exp-role">President</h3>
           <div class="exp-org">UST Journalism Society — UST, Manila</div>
@@ -2385,7 +2414,7 @@
       </article>
 
       <article class="vtl-item vtl-left reveal">
-        <div class="vtl-date-slot"><span class="exp-year">Jun 2024 — June 2025</span></div>
+        <div class="vtl-date-slot"><span class="exp-year">June 2024 — June 2025</span></div>
         <span class="vtl-dot" aria-hidden="true"></span>
         <div class="vtl-card">
           <h3 class="exp-role">Chief-of-Staff</h3>
@@ -2418,7 +2447,7 @@
 
       <article class="vtl-item vtl-right reveal">
         <span class="vtl-dot" aria-hidden="true"></span>
-        <div class="vtl-date-slot"><span class="exp-year">Oct 2023 — Jun 2025</span></div>
+        <div class="vtl-date-slot"><span class="exp-year">Oct 2023 — June 2025</span></div>
         <div class="vtl-card">
           <h3 class="exp-role">Advocacy Development and Research Head</h3>
           <div class="exp-org">UST Hiraya — UST, Manila</div>
@@ -2972,7 +3001,7 @@
   ] },
 
     { id:'marcos-resign-not-seditious', genre:'Affairs', year:'2025', 
-      title:'Lawyers\u2019 group_ Call for Marcos\u2019 resignation not seditious', 
+      title:'Marcos resign call not seditious – lawyer group', 
       link: 'https://www.newswatchplus.ph/2025/11/19/marcos-resign-call-not-seditious-lawyers/',
       pub:'NewsWatch Plus Philippines', 
       dek:'November 19 2025 · NewsWatch Plus intern Kirstien Santos contributed to this report.', 
@@ -3611,14 +3640,11 @@ function caseFileBlockHtml(block){
   /* ---------------------------------------------------------
      CREATIVE DESIGN GALLERY — grid + filmstrip lightbox
      --------------------------------------------------------- */
-  var designData = [
+ var designData = [
     { id:'missuniv', title:'3RD-RUNNER UP, MISS UNIVERSE 2025', type:'Publicity Material/Graphics \u00b7 2025', skills:['Graphic Design', 'Canva', 'Affinity'], img:'assets/missuniv.png',
       pub:'NewsWatch Plus Philippines',
       desc:'A universal graphic card for Miss Universe Philippines Ahtisa Manalo, the blues and fancy typography gives way for an elegant congratulations to the country’s candidate.',
       fb:'https://www.facebook.com/NewsWatchPlusPH/posts/pfbid025JWTrMKNxHpUxG7RtRDpfSWP68PgKVozj6ap6TFWyHvXrAEDWRnuq2mWVbtP1SDSl?rdid=l9IWaiZEorKW91Jz#' },
-    { title:'#TRILBYASKS INTRO (HORIZONTAL)', type:'Video/Motion Graphics \u00b7 2023', skills:['Video Editing','Motion Graphics','Canva','DaVinci Resolve'], video:'assets/[THE TRILBY] INTRO-Trilby Asks (Horizontal).mp4',
-      pub: 'The Trilby',
-      desc:'The fast and practical 7-second intro takes The Trilby’s color palette in motion for its vox populi segment.' },
     { title:'#TRILBYASKS INTRO (VERTICAL)', type:'Video/Motion Graphics \u00b7 2022', skills:['Video Editing','Motion Graphics','Canva','DaVinci Resolve'], video:'assets/[THE TRILBY] INTRO-Trilby Asks (Vertical).mp4',
       pub: 'The Trilby',
       desc:'The fast and practical 7-second intro takes The Trilby’s color palette in motion for its vox populi segment.' },
@@ -3629,31 +3655,27 @@ function caseFileBlockHtml(block){
       desc:'Practical yet clean and sleek, the publicity material for 2025’s LRT-1 Fare Hike aims to be an easy read for informed commuters.' },
     { title:'UST JRNSOC T-SHIRT MERCH DESIGN (BACK)', type:'Graphics \u00b7 2024', skills:['Graphic Design','Canva'], img:'assets/shirt-design.png',
       desc:'Co-designed and illustrated with Nadine T. Felismino. The UST Journalism Society’s merch is indeed fun and specially made for its students with the small doodles, bubble typography and shiny illustrations ' },
-    { title:'UST JRNSOC BEEP CARD STICKER (1)', type:'Graphics \u00b7 2024', skills:['Graphic Design','Canva'], img:'assets/beep-1.png',
+    { title:'UST JRNSOC BEEP CARD STICKER', type:'Graphics \u00b7 2024', skills:['Graphic Design','Canva'], img:'assets/beep-1.png',
       desc:'Train station theme? The UST Journalism Society takes it to the next level, inspired by recent card stickers, the yellow and blue colors of the student organization gives it a unique look for journalism students, faculty and alumni alike.' },
-    { title:'UST JRNSOC BEEP CARD STICKER (2)', type:'Graphics \u00b7 2024', skills:['Graphic Design','Canva'], img:'assets/beep-2.png',
-      desc:'Created Beep card designs for the UST Journalism Society\u2019s giveaways' },
-    { title:'UST JRNSOC LANYARD (2023)', type:'Graphics \u00b7 2024', skills:['Graphic Design','Canva'], img:'assets/lanyard_2.png',
-      desc:'The UST Journalism Society went for the heavy royal blue with clashing newspapers and silver, shiny letters to show that it means business when accommodating its merch for every journalism student, faculty and alumni alike.' },
-    /* TODO: point this at the actual 2025 lanyard image/video file once it's in /assets — reusing the 2023 art for now as a placeholder. */
     { title:'UST JRNSOC LANYARD (2025)', type:'Graphics \u00b7 2025', skills:['Graphic Design','Canva'], img:'assets/lanyard.png',
       desc:'Pati lanyard, may dark mode? The UST Journalism Society’s back-to-back designs for its 2025 lanyard has cute typography and fun color tones that is still true to the organization’s colors that any journalism student would love to use.' },
     { title:'E-SPORTS 2024', type:'Graphics \u00b7 2024', skills:['Graphic Design', 'Canva'], img:'assets/e-sports-2024.png' 
       ,desc: 'Rocking over the latest pixel graphic craze, the UST Journalism Society’s JRNSERIES: E-Sports Coverage publicity materials had delightful elements that any journalism student wishing to pursue the beat would love to look at.'
     },
-    { title:'K-POP 2024', type:'Graphics \u00b7 2024', skills:['Graphic Design'], img:'assets/coverage-2024.png',
+    { title:'K-POP 2024', type:'Graphics \u00b7 2024', skills:['Graphic Design', 'Canva'], img:'assets/coverage-2024.png',
       desc: 'Inspired by New Jeans, the UST Journalism Society’s JRNSERIES: K-Pop Coverage publicity materials were monochromatic with mixes of y2k influences.'
      },
-    { title:'BACC MASS 2024', type:'Graphics \u00b7 2024', skills:['Graphic Design'], img:'assets/bacc-banner-2024.png' 
+    { title:'BACC MASS 2024', type:'Graphics \u00b7 2024', skills:['Graphic Design', 'Canva'], img:'assets/bacc-banner-2024.png' 
       ,desc:'Hovering over the theme of Le Petit Prince (The Little Prince), the scattered stars and the pastel yellow and blue tones bring out the childlike curiosity of journalism seniors for their Baccalaureate Mass.'
     },
-    { title:'TOMASINO KUPIDO', type:'Video \u00b7 2023', skills:['Graphic Design'], video:'assets/intro-2023.mp4',
+    { title:'TOMASINO KUPIDO', type:'Video \u00b7 2023', skills:['Video Editing', 'Canva'], video:'assets/intro-2023.mp4',
       desc: 'Engagement’s a ringing as the latest video project spirals over pink and reds and shiny cursive for the Tomasino Kupido series.'
     },
+    //CTTC CLOCK Vertical
     { id:'cttc', title:'CTTC CLOCK', type:'Video \u00b7 2024', skills:['Motion Graphics', 'Affinity', 'Canva'], video:'assets/cttc-clock.mp4',
       desc: 'Always on the clock for Cut to the CHase’s short-form content, the moving clock encased in the same letter “C” used in the brand’s typography is a simple yet effective motion graphic to transition over the next part of the video.'
     },
-  ];
+  ]; 
 
   // Small skill-tag chips shared by both the folder cards (Previous
   // Works) and the design cards — same markup, same class, so the
@@ -3679,7 +3701,18 @@ function caseFileBlockHtml(block){
     if(d.video){
       media = '<video src="' + d.video + '"' +
         (d.poster ? ' poster="' + d.poster + '"' : '') +
-        (opts.controls ? ' controls playsinline' : ' autoplay muted loop playsinline') +
+        // The native fullscreen button in the control bar requests
+        // fullscreen on the <video> itself, and that video is a
+        // descendant of an already-open modal <dialog> (the
+        // scrapbook/lightbox). Fullscreening a descendant of an
+        // open modal is a genuinely inconsistent corner of the
+        // Fullscreen API across browsers/versions — some allow it,
+        // some silently reject it, which is exactly the "works in
+        // one browser, not another" behavior we saw. The ⤢ expand
+        // button already gives a reliable, correctly-proportioned
+        // large view, so the native control is dropped in favor of
+        // that single, consistent path.
+        (opts.controls ? ' controls controlsList="nofullscreen" disablePictureInPicture playsinline' : ' autoplay muted loop playsinline') +
         '></video>';
     } else if(d.img){
       media = '<img src="' + d.img + '" alt="' + d.title + '" loading="lazy">';
@@ -4030,6 +4063,25 @@ var socialPosts = [
     var d = designData[index];
     if(!d || !mediaLightboxBody) return;
     mediaLightboxBody.innerHTML = designMediaHtml(d, { controls: true });
+    // A <video> with no width/height set renders at the browser's
+    // placeholder size (a landscape 300x150 box) until its metadata
+    // has actually loaded — for a vertical clip that briefly (or, in
+    // some engines/timing, not-so-briefly) looks like a horizontal
+    // frame with the sides cropped in. Setting an explicit
+    // aspect-ratio the moment the real dimensions are known is an
+    // unambiguous style change every browser reflows on immediately,
+    // instead of relying on each engine's own timing for resizing an
+    // auto-sized replaced element inside a <dialog>.
+    var vid = mediaLightboxBody.querySelector('video');
+    if(vid){
+      var applyRatio = function(){
+        if(vid.videoWidth && vid.videoHeight){
+          vid.style.aspectRatio = vid.videoWidth + ' / ' + vid.videoHeight;
+        }
+      };
+      if(vid.readyState >= 1){ applyRatio(); }
+      else{ vid.addEventListener('loadedmetadata', applyRatio, { once:true }); }
+    }
     openDialogAnimated(mediaLightbox);
   }
   wireDialogClose(mediaLightbox);
