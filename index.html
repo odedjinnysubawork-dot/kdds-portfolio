@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kirstien Dominique Santos — Reporter Portfolio</title>
-<meta name="description" content="Investigative & features reporting portfolio — housing, labor, and the systems that shape everyday life.">
+<meta name="description" content="Kirstien's writings, visuals and everything you need to know, all in her portfolio.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -769,7 +769,21 @@
     position:sticky; top:0;
     height:100vh;
     overflow:hidden;
-    display:flex; align-items:center;
+    display:flex; align-items:flex-start;
+    /* Reserves real, fixed clearance for the heading (position:absolute,
+       pinned to the top of this same box — see .pan-heading) before
+       .pan-track is even allowed to start. flex-start (not center) is
+       deliberate: centering .pan-track within the remaining space would
+       still push its top edge back up into the reserved zone whenever
+       the track is taller than that remaining space — which happens on
+       any shorter viewport — since centering an oversized item makes it
+       overflow equally on both sides. Pinning it to the very top of the
+       padded box means its top edge is always exactly at this padding's
+       bottom edge, never higher, regardless of viewport height or how
+       tall the track itself is. 300px comfortably clears the kicker +
+       heading + lede block, including its two-line wrap on the
+       narrower end of the desktop breakpoint. */
+    padding-top:300px;
     /* Explicit cross-browser scrollbar styling for the mobile fallback,
        where JS sets overflow-x:auto. Without this, each Chromium-based
        browser (Edge, Opera, Chrome) falls back to its own scrollbar
@@ -786,8 +800,19 @@
     gap:4vw;
     padding:0 6vw;
     will-change:transform;
-    padding-top: 10%;
   }
+  /* The heading sits at the top of .pan-sticky as position:absolute,
+     which normally paints above plain static content — but every
+     .story-panel below carries its own `transform: rotate(...)`
+     (see below), and ANY transform (regardless of position/z-index)
+     promotes an element into its own stacking context at the same
+     "z-index:auto" level as a position:absolute element. With both
+     the heading and the story panels sitting at that same level, they
+     paint in DOM order instead — and since the panels come after the
+     heading in the markup, they were winning and covering it. Forcing
+     the heading onto an explicitly higher level fixes that regardless
+     of DOM order. */
+  .pan-heading{ z-index:5; }
   .story-panel{
     flex:0 0 auto;
     width:min(78vw, 620px);
@@ -883,6 +908,7 @@
     position:absolute; right:6vw; top:36px;
     font-family:var(--mono); font-size:11px; letter-spacing:.08em;
     color:var(--ink-soft); text-transform:uppercase;
+    z-index:5;
   }
 
   /* ============================================================
@@ -1946,7 +1972,7 @@
   <a href="#education" class="ps-link" data-target="education">Education</a>
 </aside>
 <aside class="page-sidebar" data-page="work" aria-label="Work section navigation">
-  <a href="#stories" class="ps-link" data-target="stories">Featured Stories</a>
+  <a href="#stories" class="ps-link" data-target="stories">Featured Work</a>
   <a href="#works" class="ps-link" data-target="works">Previous Works</a>
   <a href="#design" class="ps-link" data-target="design">Design &amp; Visual</a>
   <a href="#elsewhere" class="ps-link" data-target="elsewhere">Elsewhere Online</a>
@@ -2006,9 +2032,9 @@
      ============================================================ -->
 <section id="stories" class="pan-section" data-page="work">
   <div class="pan-sticky">
-    <div class="wrap" style="position:absolute; top:40px; left:50%; transform:translateX(-50%); width:var(--wrap);">
+    <div class="wrap pan-heading" style="position:absolute; top:40px; left:50%; transform:translateX(-50%); width:var(--wrap);">
       <span class="kicker reveal in-view">Selected Work</span>
-      <h2 class="head reveal in-view">Featured stories</h2>
+      <h2 class="head reveal in-view">Featured Work</h2>
       <p class="lede">The best of (maybe) the best yeah?</p>
     </div>
     <span class="pan-hint">Keep scrolling →</span>
@@ -2746,7 +2772,14 @@
       panTrack.parentElement.style.position = 'relative';
       panTrack.parentElement.style.overflowX = 'auto';
       panTrack.parentElement.style.height = 'auto';
-      panTrack.parentElement.style.padding = '120px 0 80px';
+      // Same reserved-clearance idea as the desktop .pan-sticky padding
+      // (see its CSS comment) — the heading is still position:absolute
+      // here, so it takes zero space in this now-normal-flow layout
+      // unless this top padding explicitly reserves room for it. At
+      // mobile widths the heading's narrower max-width often wraps the
+      // lede onto two lines, so it needs at least as much clearance as
+      // desktop, not less.
+      panTrack.parentElement.style.padding = '300px 0 80px';
       panTrack.style.transform = 'none';
       if(progressBar) progressBar.parentElement.style.display = 'none';
       return;
